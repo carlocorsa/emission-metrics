@@ -5,8 +5,35 @@ import numpy as np
 # Repo paths
 PDRMIP_PATH = "../data/pdrmip/"
 
+# Response regions dictionary
+RESPONSE_REGION_OPTIONS = {
+    1: 'Global',
+    2: 'Tropics',
+    3: 'NHML',
+    4: 'NHHL',
+    5: 'SHML',
+    6: 'SHHL',
+    7: 'Europe',
+    8: 'US',
+    9: 'China',
+    10: 'East Asia',
+    11: 'India',
+    12: 'Sahel',
+    13: 'All Regions'
+}
 
-def select_emission_region(pollutant, region=None):
+# List of available pollutants
+POLLUTANT_OPTIONS = ['SO2', 'BC', 'CO2', 'CH4']
+
+# Emission scenarios dictionary
+SCENARIO_OPTIONS = {
+    1: 'sustained',
+    2: 'linear',
+    3: 'quadratic'
+}
+
+
+def select_emission_region(pollutant, region_id=None):
     """Select emission region and returns corresponding effective radiative forcing.
 
     Parameters
@@ -15,7 +42,7 @@ def select_emission_region(pollutant, region=None):
         Name of pollutant. Can be any of the following:
         'SO2', 'BC', 'CO2', 'CH4'.
 
-    region: int or None (default=None)
+    region_id: int or None (default=None)
         The integer corresponding to an emission region, if specified.
 
         For SO2, CO2 and CH4, an integer between 1 and 6:
@@ -27,8 +54,8 @@ def select_emission_region(pollutant, region=None):
         6: Europe
 
         For BC, an integer between 1 and 2:
-        1: 'Global'
-        2: 'Asia'
+        1: Global
+        2: Asia
 
         If None, the user will need to choose the
         emission region interactively.
@@ -49,9 +76,11 @@ def select_emission_region(pollutant, region=None):
          the control experiment for the selected emission region.
     """
 
-    with open(os.path.join(PDRMIP_PATH, 'PDRMIP_mean_dERFt.json')) as f:
+    assert pollutant in POLLUTANT_OPTIONS, "{} is not an accepted pollutant".format(pollutant)
+
+    with open(os.path.join(PDRMIP_PATH, "PDRMIP_mean_dERFt.json")) as f:
         mean_erf_t_diff = json.load(f)
-    with open(os.path.join(PDRMIP_PATH, 'PDRMIP_mean_dERFa.json')) as f:
+    with open(os.path.join(PDRMIP_PATH, "PDRMIP_mean_dERFa.json")) as f:
         mean_erf_a_diff = json.load(f)
 
     emission_region_options = {
@@ -98,26 +127,29 @@ def select_emission_region(pollutant, region=None):
 
     emission_region = 0
     if pollutant != 'BC':
-        if not region:
+        if region_id is None:
             while 1 > emission_region or 6 < emission_region:
                 try:
-                    emission_region = int(input('Select an emission region (1-6):\n\n \
-1: Northern Hemisphere Mid Latitudes\n \
-2: North America\n \
-3: China\n \
-4: East Asia\n \
-5: India\n \
-6: Europe\n\n \
-Your selection:  '))
+                    emission_region = int(input(
+                        "Select an emission region (1-6):\n\n"
+                        "1: Northern Hemisphere Mid Latitudes\n"
+                        "2: North America\n"
+                        "3: China\n"
+                        "4: East Asia\n"
+                        "5: India\n"
+                        "6: Europe\n\n"
+                        "Your selection:  "
+                    ))
                     if (1 > emission_region or 6 < emission_region) and emission_region % 1 == 0:
-                        print('\nPLEASE SELECT AN INTEGER BETWEEN 1 AND 6')
+                        print("\nPLEASE SELECT AN INTEGER BETWEEN 1 AND 6")
                 except ValueError:
-                    print('\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER')
+                    print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
 
             print(emission_region_options[emission_region])
 
         else:
-            emission_region = region
+            assert region_id in range(1, 7), "region_id for {} must be an integer between 1 and 6".format(pollutant)
+            emission_region = region_id
 
         region_name = emission_region_options[emission_region]
         region_erf_t = erf_t[emission_region - 1]
@@ -126,25 +158,293 @@ Your selection:  '))
         return region_name, region_erf_t, region_erf_a
 
     else:
-        if not region:
+        if region_id is None:
             while 1 > emission_region or 2 < emission_region:
                 try:
-                    emission_region = int(input('Select an emission region (1-2):\n\n \
-1: Global\n \
-2: Asia\n\n \
-Your selection:  '))
+                    emission_region = int(input(
+                        "Select an emission region (1-2):\n\n"
+                        "1: Global\n"
+                        "2: Asia\n\n"
+                        "Your selection:  "
+                    ))
+
                     if (1 > emission_region or 2 < emission_region) and emission_region % 1 == 0:
-                        print('\nPLEASE SELECT AN INTEGER BETWEEN 1 AND 2')
+                        print("\nPLEASE SELECT AN INTEGER BETWEEN 1 AND 2")
                 except ValueError:
-                    print('\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER')
+                    print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
 
             print(emission_region_options_bc[emission_region])
 
         else:
-            emission_region = region
+            assert region_id in range(1, 3), "region_id for {} must be an integer between 1 and 2".format(pollutant)
+            emission_region = region_id
 
         region_name = emission_region_options_bc[emission_region]
         region_erf_t = erf_t[emission_region - 1]
         region_erf_a = erf_a[emission_region - 1]
 
         return region_name, region_erf_t, region_erf_a
+
+
+def select_response_region(region_id=None):
+    """Select response region.
+
+    Parameters
+    ----------
+    region_id: int or None (default=None)
+        The integer corresponding to a response region, if specified.
+
+        1: Global
+        2: Tropics
+        3: North Hemisphere Mid Latitudes
+        4: North Hemisphere High Latitudes
+        5: South Hemisphere Mid Latitudes
+        6: South Hemisphere High Latitudes
+        7: Europe
+        8: North America
+        9: China
+        10: East Asia
+        11: India
+        12: Sahel
+        13: All regions
+
+        If None, the user will need to choose the
+        response region interactively.
+    """
+
+    n_regions = len(RESPONSE_REGION_OPTIONS)
+
+    if region_id is None:
+    
+        response_region = 0
+        while 1 > response_region or n_regions < response_region:
+            try:
+                response_region = int(input(
+                    "Select a response region (1-{}) or all response region ({}):\n\n"
+                    "1: Global\n"
+                    "2: Tropics\n"
+                    "3: Northern Hemisphere Mid Latitudes\n"
+                    "4: Northern Hemisphere High Latitudes\n"
+                    "5: Southern Hemisphere Mid Latitudes\n"
+                    "6: Southern Hemisphere High Latitudes\n"
+                    "7: Europe\n"
+                    "8: United States\n"
+                    "9: China\n"
+                    "10: East Asia\n"
+                    "11: India\n"
+                    "12: Sahel\n"
+                    "13: All regions\n\n"
+                    "Your selection:  ".format(n_regions-1, n_regions)
+                ))
+
+                if (1 > response_region or n_regions < response_region) and response_region % 1 == 0:
+                    print("\nPLEASE SELECT AN INTEGER BETWEEN 1 AND {}".format(n_regions))
+            except ValueError:
+                print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
+                
+        print(RESPONSE_REGION_OPTIONS[response_region])
+
+        if response_region == n_regions:
+            return list(RESPONSE_REGION_OPTIONS.values())
+        else:
+            return RESPONSE_REGION_OPTIONS[response_region]
+
+    else:
+        assert region_id in range(1, 14), "region_id must be an integer between 1 and 13"
+        if region_id == n_regions:
+            return list(RESPONSE_REGION_OPTIONS.values())
+        else:
+            return RESPONSE_REGION_OPTIONS[region_id]
+
+
+def get_response_regions():
+    """Return the names of all response regions."""
+    return list(RESPONSE_REGION_OPTIONS.values())[: -1]
+
+
+def select_pollutant():
+    """Interactively select the pollutant to use."""
+
+    pollutant_id = 0
+    while 1 > pollutant_id or 4 < pollutant_id:
+        try:
+            pollutant_id = int(input(
+                "Select a type of pollutant (1-4):\n\n"
+                "1: Sulfur dioxide (SO2)\n"
+                "2: Black carbon   (BC)\n"
+                "3: Carbon dioxide (CO2)\n"
+                "4: Methane        (CH4)\n\n"
+                "Your selection:  "
+            ))
+
+            if (1 > pollutant_id or 4 < pollutant_id) and pollutant_id % 1 == 0:
+                print("\nPLEASE SELECT AN INTEGER BETWEEN 1 AND 4")
+        except ValueError:
+            print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
+
+    print(POLLUTANT_OPTIONS[pollutant_id - 1])
+
+    return POLLUTANT_OPTIONS[pollutant_id - 1]
+
+
+def select_magnitude():
+    """Interactively select the magnitude to use."""
+
+    magnitude = -1
+    while 0 > magnitude or 1000 < magnitude:
+        try:
+            magnitude = float(input(
+                "Select by how much the emission will "
+                "be changed (percentage of current emission):\n"
+                "   0 = total reduction (zero emission)\n"
+                " 100 = no change (100% of current emission)\n"
+                "1000 = 10 times current emissions\n\n"
+                "Your selection: "
+            ))
+
+            if 0 > magnitude or 1000 < magnitude:
+                print("\nPLEASE SELECT A NUMBER BETWEEN 0 AND 1000")
+        except ValueError:
+            print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER A NUMBER (EITHER INTEGER OR FLOAT)")
+
+    return magnitude
+
+
+def select_time_horizon():
+    """Interactively select a time horizon between 5 and 500 years."""
+
+    answer = 'nah'
+    while answer not in ['yes', 'y', 'YES', 'Y', 'no', 'n', 'NO', 'N']:
+
+        answer = str(input("Do you want to use a standard time horizon of 100 yr? "))
+
+        if answer in ['yes', 'y', 'YES', 'Y']:
+            answer = 'yes'
+            time_horizon = 100
+
+        elif answer in ['no', 'n', 'NO', 'N']:
+            answer = 'no'
+            time_horizon = 0
+
+            while 5 > time_horizon or 500 < time_horizon:
+                try:
+                    time_horizon = int(input("Select a time horizon between 5 and 500 yr: "))
+                    if 5 > time_horizon or 500 < time_horizon:
+                        print("\nPLEASE SELECT A NUMBER BETWEEN 5 AND 500")
+                except ValueError:
+                    print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER\n")
+
+    return time_horizon
+
+
+def select_scenarios():
+    """Interactively select the scenario types, time horizons and magnitudes."""
+
+    th = select_time_horizon()
+
+    magnitude = [None, None, None]
+    answer = 'nah'
+    while answer not in ['yes', 'y', 'YES', 'Y', 'no', 'n', 'NO', 'N']:
+
+        answer = str(input("Do you want to plot the temperature response for different emissions scenarios? "))
+
+        if answer in ['no', 'n', 'NO', 'N']:
+            scen = ['none'] * 4
+            return th, scen, magnitude
+
+        elif answer in ['yes', 'y', 'YES', 'Y']:
+            scen = {
+                0: 'none',
+                1: 'sustained',
+                2: 'linear',
+                3: 'quadratic'
+            }
+            ths = [0, 0, 0]
+            scenarios = [0, 0, 0, 0]
+            print("\nYou can choose up to 3 different scenarios. "
+                  "If you want to have 2 scenarios only, select the second time horizon equal to {}.".format(th))
+
+            while 1 > scenarios[0] or 3 < scenarios[0]:
+                try:
+                    scenarios[0] = int(input(
+                        "Select a first scenario (1-3):\n\n"
+                        "1: sustained\n"
+                        "2: linear\n"
+                        "3: quadratic\n\n"
+                        "Your selection:  "
+                    ))
+
+                    if (1 > scenarios[0] or 3 < scenarios[0]) and scenarios[0] % 1 == 0:
+                        print("\nPLEASE SELECT AN INTEGER BETWEEN 1 AND 3")
+                except ValueError:
+                    print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
+
+            while 5 > ths[0] or th < ths[0]:
+                try:
+                    ths[0] = int(input(
+                        "Select a time horizon between 5 and {} yr for the first scenario: ".format(str(th))
+                    ))
+
+                    if 5 > ths[0] or th < ths[0]:
+                        print("\nPLEASE SELECT A NUMBER BETWEEN 5 AND {}".format(th))
+                except ValueError:
+                    print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER\n")
+
+            magnitude[0] = select_magnitude()
+
+            if ths[0] < th:
+                while 1 > scenarios[1] or 3 < scenarios[1]:
+                    try:
+                        scenarios[1] = int(input(
+                            "Select a second scenario (1-3):\n\n"
+                            "1: sustained\n"
+                            "2: linear\n"
+                            "3: quadratic\n\n"
+                            "Your selection:  "
+                        ))
+                        if (1 > scenarios[1] or 3 < scenarios[1]) and scenarios[1] % 1 == 0:
+                            print("\nPLEASE SELECT AN INTEGER BETWEEN 1 AND 3")
+                    except ValueError:
+                        print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
+
+                while ths[0] > ths[1] or th < ths[1]:
+                    try:
+                        ths[1] = int(input(
+                            "Select a time horizon between {} and {} yr for the second scenario: ".format(
+                                str(ths[0]), str(th))
+                        ))
+
+                        if ths[0] > ths[1] or th < ths[1]:
+                            print("\nPLEASE SELECT A NUMBER BETWEEN {} AND {}".format(ths[0], th))
+                    except ValueError:
+                        print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER\n")
+
+                magnitude[1] = select_magnitude()
+
+                if ths[1] < th:
+                    while 1 > scenarios[2] or 3 < scenarios[2]:
+                        try:
+                            scenarios[2] = int(input(
+                                "Select a third scenario (1-3):\n\n"
+                                "1: sustained\n"
+                                "2: linear\n"
+                                "3: quadratic\n\n"
+                                "Your selection:  "
+                            ))
+
+                            if (1 > scenarios[1] or 3 < scenarios[1]) and scenarios[1] % 1 == 0:
+                                print("\nPLEASE SELECT AN INTEGER BETWEEN 1 AND 3")
+                        except ValueError:
+                            print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
+
+                    magnitude[2] = select_magnitude()
+                    ths[2] = th
+                else:
+                    print("\nBy choosing the second time horizon equal to {}, """
+                          "there will be two scenarios only.".format(th))
+            else:
+                print(
+                    "\nBy choosing the first time horizon equal to {}, there will be one scenario only.".format(th))
+
+            return ths, [scen[i] for i in scenarios], magnitude
+
