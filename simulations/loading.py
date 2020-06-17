@@ -11,6 +11,9 @@ from rem.simulations import regions
 
 DATA_PATH = "../data/"
 
+# List of available pollutants
+POLLUTANT_OPTIONS = ['SO2', 'BC', 'CO2', 'CH4']
+
 
 def get_file_paths(pollutant, emission_region):
     """Get the paths of the control and perturbation files for the
@@ -49,6 +52,8 @@ def get_file_paths(pollutant, emission_region):
         `pollutant` from `emission_region`.
     """
 
+    assert pollutant in POLLUTANT_OPTIONS, "{} is not an accepted pollutant".format(pollutant)
+
     if pollutant == 'SO2':
         ctl_path = os.path.join(DATA_PATH, "SO2/ctl_150year_avg.nc")
         pert_file = os.listdir(os.path.join(DATA_PATH, "SO2/No_SO2_{}/".format(emission_region)))[0]
@@ -83,16 +88,17 @@ def get_bc_emissions(emission_region):
     bc_emissions = np.squeeze(emission_data.variables['emibc'])
     emission_data.close()
 
-    # Get the emission from the emission region
-    delta_emissions = bc_emissions * regions.get_region_mask(emission_region) * 9  # 9 because the experiments are 10xBC
+    # TODO: check whether emission region should always be Asia
+    # Get the emission difference (the factor 9 is because the experiments are 10xBC) from the emission region
+    masked_delta_emissions = bc_emissions * regions.get_region_mask(emission_region) * 9
 
     # Compute the mass released in each grid cell
-    delta_emiss = areas * delta_emissions
+    masked_delta_emission_mass = areas * masked_delta_emissions
 
     # Compute the total emission mass
-    total_delta_emiss = np.ma.sum(np.ma.sum(delta_emiss))
+    delta_emission_mass = np.ma.sum(np.ma.sum(masked_delta_emission_mass))
 
-    return total_delta_emiss
+    return delta_emission_mass
 
 
 def load_grid_areas():
@@ -105,6 +111,45 @@ def load_grid_areas():
 
 
 def load_variables(pollutant, emission_region):
+    """Load temperature, precipitation and emission and compute
+    differences between perturbation and control experiments.
+
+    Parameters
+    ----------
+    pollutant: str
+        One of the following four options:
+        - SO2
+        - BC
+        - CO2
+        - CH4
+
+    emission_region: str
+        The name of the pollutant emission region.
+        For SO2, CO2 and CH4, one of the following options:
+        - NHML
+        - US
+        - China
+        - EastAsia
+        - India
+        - Europe
+
+        For BC, one of the following options:
+        - Global
+        - Asia
+
+    Returns
+    -------
+    grid_delta_temp: ndarray of shape (145, 192)
+        Array with gridded temperature differences.
+
+    grid_delta_precip: ndarray of shape (145, 192)
+        Array with gridded precipitation differences.
+
+    delta_emiss_mass: float
+        Emission mass (Tg/yr) difference.
+    """
+
+    assert pollutant in POLLUTANT_OPTIONS, "{} is not an accepted pollutant".format(pollutant)
 
     # Load grid cell areas
     areas = load_grid_areas()
@@ -129,8 +174,8 @@ def load_variables(pollutant, emission_region):
         pert_precip = pert_precip * 86400
 
     # Compute differences between perturbed and control run
-    delta_temp = pert_temp - temp
-    delta_precip = pert_precip - precip
+    grid_delta_temp = pert_temp - temp
+    grid_delta_precip = pert_precip - precip
 
     if pollutant == 'SO2':
 
@@ -145,21 +190,22 @@ def load_variables(pollutant, emission_region):
 
         # Convert emissions from kg/m2/s to Tg/yr and
         # compute the mass released in each grid cell
-        delta_emiss = areas * 2 * (3600 * 24 * 365 * 1e-9) * (pert_so2 - ctl_so2)
+        delta_so2 = areas * 2 * (3600 * 24 * 365 * 1e-9) * (pert_so2 - ctl_so2)
 
         # Compute the total emission mass
-        total_delta_emiss = np.ma.sum(np.ma.sum(delta_emiss))
+        delta_emiss_mass = np.ma.sum(np.ma.sum(delta_so2))
 
     elif pollutant == 'BC':
-        total_delta_emiss = get_bc_emissions(emission_region)
+        delta_emiss_mass = get_bc_emissions(emission_region)
 
+    # TODO: add data source
     elif pollutant == 'CH4':
-        total_delta_emiss = 860.827
+        delta_emiss_mass = 860.827
 
     elif pollutant == 'CO2':
-        total_delta_emiss = 2891000
+        delta_emiss_mass = 2891000
 
     ctl_data.close()
     pert_data.close()
 
-    return delta_temp, delta_precip, total_delta_emiss
+    return grid_delta_temp, grid_delta_precip, delta_emiss_mass
