@@ -91,12 +91,12 @@ def get_bc_emissions(emission_region):
     masked_delta_emissions = bc_emissions * regions.get_region_mask(emission_region) * 9
 
     # Compute the mass released in each grid cell
-    masked_delta_emission_mass = areas * masked_delta_emissions
+    masked_delta_emiss_mass = areas * masked_delta_emissions
 
     # Compute the total emission mass
-    delta_emission_mass = np.ma.sum(np.ma.sum(masked_delta_emission_mass))
+    delta_emiss_mass = np.ma.sum(np.ma.sum(masked_delta_emiss_mass))
 
-    return delta_emission_mass
+    return delta_emiss_mass
 
 
 def load_grid_areas():
