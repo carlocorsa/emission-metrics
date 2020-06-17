@@ -79,9 +79,9 @@ def select_emission_region(pollutant, region_id=None):
     assert pollutant in POLLUTANT_OPTIONS, "{} is not an accepted pollutant".format(pollutant)
 
     with open(os.path.join(PDRMIP_PATH, "PDRMIP_mean_dERFt.json")) as f:
-        mean_erf_t_diff = json.load(f)
+        mean_delta_erf_t = json.load(f)
     with open(os.path.join(PDRMIP_PATH, "PDRMIP_mean_dERFa.json")) as f:
-        mean_erf_a_diff = json.load(f)
+        mean_delta_erf_a = json.load(f)
 
     emission_region_options = {
         1: 'NHML',
@@ -104,26 +104,26 @@ def select_emission_region(pollutant, region_id=None):
 
     elif pollutant == 'BC':
         erf_t = [
-            np.mean([mean_erf_t_diff[k]['10xBC_'] for k, v in mean_erf_t_diff.items()
-                     if '10xBC_' in mean_erf_t_diff[k].keys()]),
-            np.mean([mean_erf_t_diff[k]['10xBCAsia'] for k, v in mean_erf_t_diff.items()
-                     if '10xBCAsia' in mean_erf_t_diff[k].keys()])
+            np.mean([mean_delta_erf_t[k]['10xBC_'] for k, v in mean_delta_erf_t.items()
+                     if '10xBC_' in mean_delta_erf_t[k].keys()]),
+            np.mean([mean_delta_erf_t[k]['10xBCAsia'] for k, v in mean_delta_erf_t.items()
+                     if '10xBCAsia' in mean_delta_erf_t[k].keys()])
         ]
         erf_a = [
-            np.mean([mean_erf_a_diff[k]['10xBC_'] for k, v in mean_erf_a_diff.items()
-                     if '10xBC_' in mean_erf_a_diff[k].keys()]),
-            np.mean([mean_erf_a_diff[k]['10xBCAsia'] for k, v in mean_erf_a_diff.items()
-                     if '10xBCAsia' in mean_erf_a_diff[k].keys()])
+            np.mean([mean_delta_erf_a[k]['10xBC_'] for k, v in mean_delta_erf_a.items()
+                     if '10xBC_' in mean_delta_erf_a[k].keys()]),
+            np.mean([mean_delta_erf_a[k]['10xBCAsia'] for k, v in mean_delta_erf_a.items()
+                     if '10xBCAsia' in mean_delta_erf_a[k].keys()])
         ]
 
     # The effective radiative forcing is independent of the emission region for CO2 and CH4
     elif pollutant == 'CO2':
-        erf_t = [np.mean([mean_erf_t_diff[k]['2xCO2'] for k, v in mean_erf_t_diff.items()])] * 6
-        erf_a = [np.mean([mean_erf_a_diff[k]['2xCO2'] for k, v in mean_erf_a_diff.items()])] * 6
+        erf_t = [np.mean([mean_delta_erf_t[k]['2xCO2'] for k, v in mean_delta_erf_t.items()])] * 6
+        erf_a = [np.mean([mean_delta_erf_a[k]['2xCO2'] for k, v in mean_delta_erf_a.items()])] * 6
 
     elif pollutant == 'CH4':
-        erf_t = [np.mean([mean_erf_t_diff[k]['3xCH4'] for k, v in mean_erf_t_diff.items()])] * 6
-        erf_a = [np.mean([mean_erf_a_diff[k]['3xCH4'] for k, v in mean_erf_a_diff.items()])] * 6
+        erf_t = [np.mean([mean_delta_erf_t[k]['3xCH4'] for k, v in mean_delta_erf_t.items()])] * 6
+        erf_a = [np.mean([mean_delta_erf_a[k]['3xCH4'] for k, v in mean_delta_erf_a.items()])] * 6
 
     emission_region = 0
     if pollutant != 'BC':
