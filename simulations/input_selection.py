@@ -1,8 +1,14 @@
+# Standard library imports
 import os
+
+# Third party imports
 import json
 import numpy as np
 
-# Repo paths
+# Local application imports
+from rem.utils import constants
+
+# Local paths
 PDRMIP_PATH = "../data/pdrmip/"
 
 # Response regions dictionary
@@ -22,9 +28,6 @@ RESPONSE_REGION_OPTIONS = {
     13: 'All Regions'
 }
 
-# List of available pollutants
-POLLUTANT_OPTIONS = ['SO2', 'BC', 'CO2', 'CH4']
-
 # Emission scenarios dictionary
 SCENARIO_OPTIONS = {
     1: 'sustained',
@@ -33,7 +36,7 @@ SCENARIO_OPTIONS = {
 }
 
 
-def select_emission_region(pollutant, region_id=None):
+def select_emission_region(pollutant, region=None):
     """Select emission region and returns corresponding effective radiative forcing.
 
     Parameters
@@ -42,20 +45,20 @@ def select_emission_region(pollutant, region_id=None):
         Name of pollutant. Can be any of the following:
         'SO2', 'BC', 'CO2', 'CH4'.
 
-    region_id: int or None (default=None)
-        The integer corresponding to an emission region, if specified.
+    region: str or None (default=None)
+        The name of emission region, if specified.
 
-        For SO2, CO2 and CH4, an integer between 1 and 6:
-        1: Northern Hemisphere Mid Latitudes
-        2: North America
-        3: China
-        4: East Asia
-        5: India
-        6: Europe
+        For SO2, CO2 and CH4, must be one of the following options:
+        - Northern Hemisphere Mid Latitudes
+        - North America
+        - China
+        - East Asia
+        - India
+        - Europe
 
-        For BC, an integer between 1 and 2:
-        1: Global
-        2: Asia
+        For BC, must be one of the following options:
+        - Global
+        - Asia
 
         If None, the user will need to choose the
         emission region interactively.
@@ -76,7 +79,7 @@ def select_emission_region(pollutant, region_id=None):
          the control experiment for the selected emission region.
     """
 
-    assert pollutant in POLLUTANT_OPTIONS, "{} is not an accepted pollutant".format(pollutant)
+    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
 
     with open(os.path.join(PDRMIP_PATH, "PDRMIP_mean_dERFt.json")) as f:
         mean_delta_erf_t = json.load(f)
@@ -92,7 +95,7 @@ def select_emission_region(pollutant, region_id=None):
         6: 'Europe'
     }
 
-    emission_region_options_bc = {
+    bc_emission_region_options = {
         1: 'Global',
         2: 'Asia'
     }
@@ -127,7 +130,7 @@ def select_emission_region(pollutant, region_id=None):
 
     emission_region = 0
     if pollutant != 'BC':
-        if region_id is None:
+        if region is None:
             while 1 > emission_region or 6 < emission_region:
                 try:
                     emission_region = int(input(
@@ -145,20 +148,25 @@ def select_emission_region(pollutant, region_id=None):
                 except ValueError:
                     print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
 
+            region_name = emission_region_options[emission_region]
+            region_erf_t = erf_t[emission_region - 1]
+            region_erf_a = erf_a[emission_region - 1]
+
             print(emission_region_options[emission_region])
 
         else:
-            assert region_id in range(1, 7), "region_id for {} must be an integer between 1 and 6".format(pollutant)
-            emission_region = region_id
+            assert region in constants.EMISS_REGIONS, \
+                "region for {} must be one of {}".format(pollutant, constants.EMISS_REGIONS)
 
-        region_name = emission_region_options[emission_region]
-        region_erf_t = erf_t[emission_region - 1]
-        region_erf_a = erf_a[emission_region - 1]
+            region_name = region
+            region_id = next(k for k, v in emission_region_options.items() if v == region_name)
+            region_erf_t = erf_t[region_id - 1]
+            region_erf_a = erf_a[region_id - 1]
 
         return region_name, region_erf_t, region_erf_a
 
     else:
-        if region_id is None:
+        if region is None:
             while 1 > emission_region or 2 < emission_region:
                 try:
                     emission_region = int(input(
@@ -173,21 +181,26 @@ def select_emission_region(pollutant, region_id=None):
                 except ValueError:
                     print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
 
-            print(emission_region_options_bc[emission_region])
+            region_name = bc_emission_region_options[emission_region]
+            region_erf_t = erf_t[emission_region - 1]
+            region_erf_a = erf_a[emission_region - 1]
+
+            print(bc_emission_region_options[emission_region])
 
         else:
-            assert region_id in range(1, 3), "region_id for {} must be an integer between 1 and 2".format(pollutant)
-            emission_region = region_id
+            assert region in constants.BC_EMISS_REGIONS, \
+                "region for {} must be one of {}".format(pollutant, constants.BC_EMISS_REGIONS)
 
-        region_name = emission_region_options_bc[emission_region]
-        region_erf_t = erf_t[emission_region - 1]
-        region_erf_a = erf_a[emission_region - 1]
+            region_name = region
+            region_id = next(k for k, v in bc_emission_region_options.items() if v == region_name)
+            region_erf_t = erf_t[region_id - 1]
+            region_erf_a = erf_a[region_id - 1]
 
         return region_name, region_erf_t, region_erf_a
 
 
 def select_response_region(region_id=None):
-    """Select response region.
+    """Interactively select response region.
 
     Parameters
     ----------
@@ -241,7 +254,7 @@ def select_response_region(region_id=None):
                     print("\nPLEASE SELECT AN INTEGER BETWEEN 1 AND {}".format(n_regions))
             except ValueError:
                 print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
-                
+
         print(RESPONSE_REGION_OPTIONS[response_region])
 
         if response_region == n_regions:
@@ -259,7 +272,7 @@ def select_response_region(region_id=None):
 
 def get_response_regions():
     """Return the names of all response regions."""
-    return list(RESPONSE_REGION_OPTIONS.values())[: -1]
+    return list(RESPONSE_REGION_OPTIONS.values())[:-1]
 
 
 def select_pollutant():
@@ -282,9 +295,9 @@ def select_pollutant():
         except ValueError:
             print("\nTHE SELECTION IS NOT VALID, PLEASE ENTER AN INTEGER")
 
-    print(POLLUTANT_OPTIONS[pollutant_id - 1])
+    print(constants.POLLUTANTS[pollutant_id - 1])
 
-    return POLLUTANT_OPTIONS[pollutant_id - 1]
+    return constants.POLLUTANTS[pollutant_id - 1]
 
 
 def select_magnitude():
