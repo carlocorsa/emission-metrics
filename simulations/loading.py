@@ -73,32 +73,6 @@ def get_file_paths(pollutant, emission_region):
     return ctl_path, pert_path
 
 
-def get_bc_emissions(emission_region):
-    """Load BC AeroCom (https://aerocom.met.no/) emissions
-    for the specified `emission_region`."""
-
-    # Load grid cell areas
-    areas = load_grid_areas()
-
-    # Load BC emissions
-    emission_path = os.path.join(DATA_PATH, "pdrmip/emissions/regridded_aerocom_BC_emissions_2006.nc")
-    emission_data = Dataset(emission_path, mode='r')
-    bc_emissions = np.squeeze(emission_data.variables['emibc'])
-    emission_data.close()
-
-    # TODO: check whether emission region should always be Asia
-    # Get the emission difference (the factor 9 is because the experiments are 10xBC) from the emission region
-    masked_delta_emissions = bc_emissions * regions.get_region_mask(emission_region) * 9
-
-    # Compute the mass released in each grid cell
-    masked_delta_emiss_mass = areas * masked_delta_emissions
-
-    # Compute the total emission mass
-    delta_emiss_mass = np.ma.sum(np.ma.sum(masked_delta_emiss_mass))
-
-    return delta_emiss_mass
-
-
 def load_grid_areas():
     """Load the area of the grid cells."""
 
@@ -109,7 +83,7 @@ def load_grid_areas():
 
 
 def load_variables(pollutant, emission_region):
-    """Load temperature, precipitation and emission and compute
+    """Load temperature and precipitation and compute
     differences between perturbation and control experiments.
 
     Parameters
@@ -142,9 +116,6 @@ def load_variables(pollutant, emission_region):
 
     grid_delta_precip: ndarray of shape (145, 192)
         Array with gridded precipitation differences.
-
-    delta_emiss_mass: float
-        Emission mass (Tg/yr) difference.
     """
 
     assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
@@ -175,7 +146,57 @@ def load_variables(pollutant, emission_region):
     grid_delta_temp = pert_temp - temp
     grid_delta_precip = pert_precip - precip
 
+    # Close datasets
+    ctl_data.close()
+    pert_data.close()
+
+    return grid_delta_temp, grid_delta_precip
+
+
+def get_emissions(pollutant, emission_region):
+    """Get emissions for the specified pollutant and emission_region.
+
+    Parameters
+    ----------
+    pollutant: str
+        One of the following four options:
+        - SO2
+        - BC
+        - CO2
+        - CH4
+
+    emission_region: str
+        The name of the pollutant emission region.
+        For SO2, CO2 and CH4, one of the following options:
+        - NHML
+        - US
+        - China
+        - EastAsia
+        - India
+        - Europe
+
+        For BC, one of the following options:
+        - Global
+        - Asia
+
+    Returns
+    -------
+    delta_emiss_mass: float
+        Emission mass (Tg/yr) difference.
+    """
+
+    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
+
+    # Load grid cell areas
+    areas = load_grid_areas()
+
     if pollutant == 'SO2':
+        # Get control and perturbation file paths
+        ctl_path, pert_path = get_file_paths(pollutant, emission_region)
+
+        # Read netCDF files
+        ctl_data = Dataset(ctl_path, mode='r')
+        pert_data = Dataset(pert_path, mode='r')
 
         # Load SO2 emissions
         ctl_so2_low = np.squeeze(ctl_data.variables['field569'])
@@ -194,7 +215,21 @@ def load_variables(pollutant, emission_region):
         delta_emiss_mass = np.ma.sum(np.ma.sum(delta_so2))
 
     elif pollutant == 'BC':
-        delta_emiss_mass = get_bc_emissions(emission_region)
+        # Load BC emissions
+        emission_path = os.path.join(DATA_PATH, "pdrmip/emissions/regridded_aerocom_BC_emissions_2006.nc")
+        emission_data = Dataset(emission_path, mode='r')
+        bc_emissions = np.squeeze(emission_data.variables['emibc'])
+        emission_data.close()
+
+        # TODO: check whether emission region should always be Asia
+        # Get the emission difference (the factor 9 is because the experiments are 10xBC) from the emission region
+        masked_delta_emissions = bc_emissions * regions.get_region_mask(emission_region) * 9
+
+        # Compute the mass released in each grid cell
+        masked_delta_emiss_mass = areas * masked_delta_emissions
+
+        # Compute the total emission mass
+        delta_emiss_mass = np.ma.sum(np.ma.sum(masked_delta_emiss_mass))
 
     # TODO: add data source
     elif pollutant == 'CH4':
@@ -203,7 +238,4 @@ def load_variables(pollutant, emission_region):
     elif pollutant == 'CO2':
         delta_emiss_mass = 2891000
 
-    ctl_data.close()
-    pert_data.close()
-
-    return grid_delta_temp, grid_delta_precip, delta_emiss_mass
+    return delta_emiss_mass
