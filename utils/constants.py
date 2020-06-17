@@ -1,3 +1,5 @@
+# List of available pollutants
+POLLUTANTS = ['SO2', 'BC', 'CO2', 'CH4']
 
 # Radiative efficiency
 A_CO2 = 1.76e-15  # W m-2 kg-1 (Myhre et al. 2013, used by Shine et al. 2015)

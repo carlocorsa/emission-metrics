@@ -7,12 +7,10 @@ from netCDF4 import Dataset
 from scipy.io import readsav
 
 # Local application imports
+from rem.utils import constants
 from rem.simulations import regions
 
 DATA_PATH = "../data/"
-
-# List of available pollutants
-POLLUTANT_OPTIONS = ['SO2', 'BC', 'CO2', 'CH4']
 
 
 def get_file_paths(pollutant, emission_region):
@@ -52,7 +50,7 @@ def get_file_paths(pollutant, emission_region):
         `pollutant` from `emission_region`.
     """
 
-    assert pollutant in POLLUTANT_OPTIONS, "{} is not an accepted pollutant".format(pollutant)
+    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
 
     if pollutant == 'SO2':
         ctl_path = os.path.join(DATA_PATH, "SO2/ctl_150year_avg.nc")
@@ -149,7 +147,7 @@ def load_variables(pollutant, emission_region):
         Emission mass (Tg/yr) difference.
     """
 
-    assert pollutant in POLLUTANT_OPTIONS, "{} is not an accepted pollutant".format(pollutant)
+    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
 
     # Load grid cell areas
     areas = load_grid_areas()
