@@ -143,3 +143,14 @@ def compute_radiative_efficiency(pollutant, emission_region, response_region):
     return rr_rad_eff, rad_eff, rad_eff_a
 
 
+def get_scaled_climate_sensitivity(pollutant):
+    """Get the scaled climate sensitivity for `pollutant`."""
+
+    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
+
+    c_scaled = [
+        constants.C1 * scaling.get_mm_scaling(pollutant, 'temperature')[2],
+        constants.C2 * scaling.get_mm_scaling(pollutant, 'temperature')[2]
+    ]
+
+    return c_scaled
