@@ -21,7 +21,8 @@ rr_rad_eff, rad_eff, rad_eff_a = variables.compute_radiative_efficiency(
 )
 
 # Compute potentials
-iARTP, ARTP = co2.compute_atp(rad_eff, time_horizon)
+iARTP, ARTP = co2.compute_atp(rr_rad_eff, time_horizon)
+iAGTP, AGTP = co2.compute_atp(rad_eff, time_horizon)
 
 iarpp, slow_iarpp, fast_iarpp, arpp, slow_arpp, fast_arpp = co2.compute_app(
     rad_eff, rad_eff_a, time_horizon, rr_precip_avg, precip_avg
