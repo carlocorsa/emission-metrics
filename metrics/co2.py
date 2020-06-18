@@ -71,14 +71,13 @@ def compute_atp(rad_eff, th):
 
 
 def compute_app(rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
-    """Compute integrated and pulse Absolute Precipitation Potential (APP).
-    Depending on the radiative efficiency `rad_eff` the returned potentials
-    can be either regional or global.
+    """Compute integrated and pulse Absolute Regional
+    Precipitation Potential (ARPP) for CO2.
 
     Parameters
     ----------
     rad_eff: float
-        Radiative efficiency for CO2 experiments.
+        Global radiative efficiency for CO2 experiments.
 
     rad_eff_a: float
         Atmospheric component of the radiative efficiency for CO2 experiments.
@@ -115,28 +114,31 @@ def compute_app(rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
 
     assert th >= 5, "The chosen time horizon is smaller than 5."
 
-    iagtp, atp = compute_atp(rad_eff, th)
+    # Compute the absolute global temperature potentials
+    iagtp, agtp = compute_atp(rad_eff, th)
 
     # Compute the integrated absolute regional precipitation potential (iARPP)
     iarpp = Cf * (K * iagtp - Fp * rad_eff_a * (
             A0 * th + sum(Ai[i] * TAU[i] * (1 - np.exp(-th / TAU[i])) for i in range(3))
     )) * (rr_precip_avg / precip_avg)
 
-    # Compute the slow and fast components of the iARPP separately
+    # Compute the slow response component of the iARPP
     slow_iarpp = Cf * K * iagtp * (rr_precip_avg / precip_avg)
 
+    # Compute the fast response component of the iARPP
     fast_iarpp = Cf * (-Fp * rad_eff_a * (
             A0 * th + sum(Ai[i] * TAU[i] * (1 - np.exp(-th / TAU[i])) for i in range(3))
     )) * (rr_precip_avg / precip_avg)
 
     # Compute the pulse absolute regional precipitation potential (iARPP)
-    arpp = Cf * (K * atp - Fp * rad_eff_a * (
+    arpp = Cf * (K * agtp - Fp * rad_eff_a * (
             A0 + sum(Ai[i] * np.exp(-th / TAU[i]) for i in range(3))
     )) * (rr_precip_avg / precip_avg)
 
-    # Compute the slow and fast components of the ARPP separately
-    slow_arpp = Cf * K * atp * (rr_precip_avg / precip_avg)
+    # Compute the slow response component of the iARPP
+    slow_arpp = Cf * K * agtp * (rr_precip_avg / precip_avg)
 
+    # Compute the fast response component of the iARPP
     fast_arpp = Cf * (-Fp * rad_eff_a * (
             A0 + sum(Ai[i] * np.exp(-th / TAU[i]) for i in range(3))
     )) * (rr_precip_avg / precip_avg)
