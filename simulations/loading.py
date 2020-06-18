@@ -82,7 +82,7 @@ def load_grid_areas():
     return areas
 
 
-def load_variables(pollutant, emission_region):
+def load_climate_variables(pollutant, emission_region):
     """Load temperature and precipitation and compute
     differences between perturbation and control experiments.
 
@@ -153,7 +153,7 @@ def load_variables(pollutant, emission_region):
     return grid_delta_temp, grid_delta_precip
 
 
-def get_emissions(pollutant, emission_region):
+def load_emissions(pollutant, emission_region):
     """Get emissions for the specified pollutant and emission_region.
 
     Parameters
