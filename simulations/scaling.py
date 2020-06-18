@@ -2,7 +2,10 @@
 import numpy as np
 
 # Local application imports
-from rem.utils import stats
+from rem.utils import stats, constants
+
+# Index of HadGEM3 - model used for SO2 simulations
+HadGEM3 = 3
 
 
 def get_mm_scaling(pollutant, variable):
@@ -43,7 +46,8 @@ def get_mm_scaling(pollutant, variable):
 
     """
 
-    HadGEM3 = 3
+    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
+    assert variable in ['temperature', 'precipitation'], "{} is not an accepted variable.".format(variable)
 
     # Temperature, radiative forcing and precipitation variations between
     # CO2 perturbation and control experiments in the different PDRMIP models
