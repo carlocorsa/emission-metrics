@@ -108,7 +108,7 @@ def compute_radiative_efficiency(pollutant, emission_region, response_region):
     delta_emiss_mass = loading.load_emissions(pollutant, emission_region)
 
     # Get the gridded climate responses
-    grid_delta_temp, grid_delta_precip = loading.load_variables(pollutant, emission_region)
+    grid_delta_temp, grid_delta_precip = loading.load_climate_variables(pollutant, emission_region)
 
     # Compute average climate variables
     rr_temp_avg, temp_avg, rr_precip_avg, precip_avg = compute_climate_variables(
