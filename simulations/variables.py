@@ -115,6 +115,7 @@ def compute_radiative_efficiency(pollutant, emission_region, response_region):
         response_region, grid_delta_temp, grid_delta_precip
     )
 
+    # Compute regional and global radiative efficiency for the different pollutants
     if pollutant == 'SO2':
         rr_rad_eff = ((erf * scaling.get_mm_scaling(pollutant, 'temperature')[1]) * (rr_temp_avg / temp_avg) /
                       (delta_emiss_mass * constants.SPECS[pollutant]['tau']))
