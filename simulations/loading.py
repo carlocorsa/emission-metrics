@@ -127,9 +127,6 @@ def load_climate_variables(pollutant, emission_region):
         assert emission_region in constants.EMISS_REGIONS, \
             "{} is not an accepted emission region for {}".format(emission_region, pollutant)
 
-    # Load grid cell areas
-    areas = load_grid_areas()
-
     # Get control and perturbation file paths
     ctl_path, pert_path = get_file_paths(pollutant, emission_region)
 
