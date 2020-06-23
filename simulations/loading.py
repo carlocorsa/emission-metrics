@@ -120,6 +120,13 @@ def load_climate_variables(pollutant, emission_region):
 
     assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
 
+    if pollutant == 'BC':
+        assert emission_region in constants.BC_EMISS_REGIONS, \
+            "{} is not an accepted emission region for {}".format(emission_region, pollutant)
+    else:
+        assert emission_region in constants.EMISS_REGIONS, \
+            "{} is not an accepted emission region for {}".format(emission_region, pollutant)
+
     # Load grid cell areas
     areas = load_grid_areas()
 
