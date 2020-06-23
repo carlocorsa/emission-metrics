@@ -29,7 +29,7 @@ def compute_atp(rad_eff, th):
         Radiative efficiency for CO2 experiments.
 
     th: int
-        Time horizon - must not be smaller than 5.
+        Time horizon.
 
     Returns
     -------
@@ -40,8 +40,6 @@ def compute_atp(rad_eff, th):
         Pulse absolute (either regional or global) temperature potential.
 
     """
-
-    assert th >= 5, "The chosen time horizon is smaller than 5."
 
     # Compute the integrated absolute temperature potential
     iatp = rad_eff * (
@@ -83,7 +81,7 @@ def compute_app(rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
         Atmospheric component of the radiative efficiency for CO2 experiments.
 
     th: int
-        Time horizon - must not be smaller than 5.
+        Time horizon.
 
     rr_precip_avg: float
         Average regional precipitation difference.
@@ -111,8 +109,6 @@ def compute_app(rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
     fast_arpp: float
         Fast response component of the ARPP.
     """
-
-    assert th >= 5, "The chosen time horizon is smaller than 5."
 
     # Compute the absolute global temperature potentials
     iagtp, agtp = compute_atp(rad_eff, th)
