@@ -67,7 +67,7 @@ def get_model_variability(response_region):
         for j in range(n_regions):
             region = region_names[j]
 
-            # Compute average regional temperature and prepicipitation
+            # Compute average regional temperature and precipitation
             region_mask = regions.get_region_mask(region)
             region_masked_area = areas * region_mask
             total_area = np.ma.sum(np.ma.sum(region_masked_area))
@@ -86,10 +86,10 @@ def get_model_variability(response_region):
     
     region_temp_df['avg'] = region_temp_df[columns].mean(axis=1)
     region_temp_df['std'] = region_temp_df[columns].std(axis=1)
-    region_temp_df['ens_std'] = region_temp_df[columns].std(axis=1) / np.sqrt(N)
+    region_temp_df['std_err'] = region_temp_df[columns].std(axis=1) / np.sqrt(N)
 
     region_precip_df['avg'] = region_precip_df[columns].mean(axis=1)
     region_precip_df['std'] = region_precip_df[columns].std(axis=1)
-    region_precip_df['ens_std'] = region_precip_df[columns].std(axis=1) / np.sqrt(N)
+    region_precip_df['std_err'] = region_precip_df[columns].std(axis=1) / np.sqrt(N)
       
     return region_temp_df, region_precip_df
