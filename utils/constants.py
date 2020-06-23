@@ -1,6 +1,9 @@
 # List of available pollutants
 POLLUTANTS = ['SO2', 'BC', 'CO2', 'CH4']
 
+# List of single lifetime pollutants
+SLP = ['SO2', 'BC', 'CH4']
+
 # Radiative efficiency
 A_CO2 = 1.76e-15  # W m-2 kg-1 (Myhre et al. 2013, used by Shine et al. 2015)
 A_CH4 = 2.11e-13  # W m-2 kg-1 (Myhre et al. 2013, used by Shine et al. 2015)
@@ -29,6 +32,9 @@ EMISS_REGIONS = ['NHML', 'US', 'China', 'EastAsia', 'India', 'Europe']
 
 # List of available emission regions for BC
 BC_EMISS_REGIONS = ['Global', 'Asia']
+
+# Scenario types
+SCENARIOS = ['linear', 'sustained', 'quadratic']
 
 # Pollutant specific constants
 SPECS = {
