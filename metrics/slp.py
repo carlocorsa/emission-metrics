@@ -27,7 +27,7 @@ def compute_atp(pollutant, rad_eff, th):
         Radiative efficiency for CO2 experiments.
 
     th: int
-        Time horizon - must not be smaller than 5.
+        Time horizon.
 
     Returns
     -------
@@ -39,7 +39,6 @@ def compute_atp(pollutant, rad_eff, th):
 
     """
 
-    assert th >= 5, "The chosen time horizon is smaller than 5."
     assert pollutant in constants.SLP, "{} is not an accepted pollutant".format(pollutant)
 
     # Load constants
@@ -84,7 +83,7 @@ def compute_app(pollutant, rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
         Atmospheric component of the radiative efficiency for CO2 experiments.
 
     th: int
-        Time horizon - must not be smaller than 5.
+        Time horizon.
 
     rr_precip_avg: float
         Average regional precipitation difference.
@@ -113,7 +112,6 @@ def compute_app(pollutant, rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
         Fast response component of the ARPP.
     """
 
-    assert th >= 5, "The chosen time horizon is smaller than 5."
     assert pollutant in constants.SLP, "{} is not an accepted pollutant".format(pollutant)
 
     # Load constants
