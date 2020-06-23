@@ -42,14 +42,16 @@ SPECS = {
     'SO2': {
         'tau': 4.35 / 365,  # Wang et al. (2013) (1 SO2 + 4 SO4),
         'fp': -0.4,  # Kvalevag et al. (2013) used by Shine et al. (2015),
-        'k': 2.678,  # std = 0.317 - All k values were given by Bjorn from his paper Samset et al. (2018)
+        'k': 2.678,  # All k values were given by Bjorn from his paper Samset et al. (2018)
+        'k_std': 0.317
     },
 
     'BC': {
         'tau': 6.8 / 365,  # Wang et al. (2014) also cited by Hodnebrog et al. (2014)
         'fp': 1,  # because we are using RFa instead of RF -
                   # otherwise use 6.2 from Kvalevag et al. (2013) used by Shine et al. (2015)
-        'k': 2.675,  # std = 0.819
+        'k': 2.675,
+        'k_std': 0.819
     },
 
     'CO2': {
@@ -58,7 +60,8 @@ SPECS = {
         'ai': [0.259, 0.338, 0.186],
         'fp': 1,  # because we are using RFa instead of RF -
                   # Otherwise use 0.6 from Kvalevag et al. (2013) used by Shine et al. (2015)
-        'k': 2.470  # std = 0.160
+        'k': 2.470,
+        'k_std': 0.160
     },
 
     'CH4': {
@@ -68,7 +71,8 @@ SPECS = {
                             # check also Collins et al. (2013) -> 8.7 * f and Myhre et al. (2013) -> 12.4 yr
         'fp': 1,  # because we are using RFa instead of RF
                   # Otherwise use 0.3 from Kvalevag et al. (2013) used by Shine et al. (2015)
-        'k': 2.766  # std = 0.383
+        'k': 2.766 ,
+        'k_std': 0.383
     }
 
 }
