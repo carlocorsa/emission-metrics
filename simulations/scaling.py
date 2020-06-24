@@ -32,7 +32,7 @@ def get_mm_scaling(pollutant, variable):
     var_scaling: float
         The scaling factor for `variable`.
 
-    RF_scaling: float
+    rf_scaling: float
         The scaling factor for the radiative forcing.
 
     c_scaling: float
@@ -51,16 +51,15 @@ def get_mm_scaling(pollutant, variable):
 
     # Temperature, radiative forcing and precipitation variations between
     # CO2 perturbation and control experiments in the different PDRMIP models
-    CO2_dT = [2.70, 1.49, 2.73, 3.73, 2.15, 3.17, 2.47, 2.06, 1.46]
-    CO2_dRF = [3.57, 4.06, 3.37, 3.64, 4.14, 3.62, 4.06, 3.50, 3.62]
-    # CO2_dP = [4.13, 1.00, 3.41, 5.63, 2.97, 5.68, 3.48, 3.25, 1.68]
+    co2_dtemp = [2.70, 1.49, 2.73, 3.73, 2.15, 3.17, 2.47, 2.06, 1.46]
+    co2_drf = [3.57, 4.06, 3.37, 3.64, 4.14, 3.62, 4.06, 3.50, 3.62]
 
     # Compute temperature stats (average, standard deviation and
     # ensemble standard deviation) for CO2 experiments
-    CO2_dT_avg, CO2_dT_std, CO2_dT_ens_std = stats.compute_stats(CO2_dT)
+    co2_dtemp_avg, co2_dtemp_std, co2_dtemp_std_err = stats.compute_stats(co2_dtemp)
 
     # Compute radiative forcing stats CO2 experiments
-    CO2_dRF_avg, CO2_dRF_std, CO2_dRF_ens_std = stats.compute_stats(CO2_dRF)
+    co2_drf_avg, co2_drf_std, co2_drf_std_err = stats.compute_stats(co2_drf)
 
     if pollutant == 'BC':
         if variable == 'temperature':
@@ -69,7 +68,7 @@ def get_mm_scaling(pollutant, variable):
         elif variable == 'precipitation':
             dvar = [-2.39, -1.39, -1.87, 0.298, np.nan, -1.64, -1.16, -1.49, -1.32]
 
-        dRF = [1.55, 1.23, 1.19, 0.70, np.nan, 0.77, 0.41, 1.40, 0.63]
+        drf = [1.55, 1.23, 1.19, 0.70, np.nan, 0.77, 0.41, 1.40, 0.63]
 
     # TODO: these values apply to SO4, check for SO2
     if pollutant == 'SO2':
@@ -79,7 +78,7 @@ def get_mm_scaling(pollutant, variable):
         elif variable == 'precipitation':
             dvar = [-6.54, -2.88, -6.26, -16.8, np.nan, -3.9, -4.05, -4.93, -3.06]
 
-        dRF = [-3.25, -2.79, -4.02, -8.26, np.nan, -2.04, -2.11, -3.79, -2.77]
+        drf = [-3.25, -2.79, -4.02, -8.26, np.nan, -2.04, -2.11, -3.79, -2.77]
 
     if pollutant == 'CO2':
         if variable == 'temperature':
@@ -88,7 +87,7 @@ def get_mm_scaling(pollutant, variable):
         elif variable == 'precipitation':
             dvar = [4.13, 1.00, 3.41, 5.63, 2.97, 5.68, 3.48, 3.25, 1.68]
 
-        dRF = [3.57, 4.06, 3.37, 3.64, 4.14, 3.62, 4.06, 3.50, 3.62]
+        drf = [3.57, 4.06, 3.37, 3.64, 4.14, 3.62, 4.06, 3.50, 3.62]
 
     if pollutant == 'CH4':
         if variable == 'temperature':
@@ -97,28 +96,28 @@ def get_mm_scaling(pollutant, variable):
         elif variable == 'precipitation':
             dvar = [1.00, 0.61, 1.40, 2.50, 0.60, 2.41, 0.71, 1.39, 0.32]
 
-        dRF = [1.36, 1.34, 0.98, 1.39, 0.95, 1.27, 0.86, 1.24, 0.78]
+        drf = [1.36, 1.34, 0.98, 1.39, 0.95, 1.27, 0.86, 1.24, 0.78]
 
     # Compute radiative forcing stats for `pollutant` experiments
-    dRF_avg, dRF_std, dRF_ens_std = stats.compute_stats(dRF)
+    drf_avg, drf_std, drf_std_err = stats.compute_stats(drf)
 
     # Compute `variable` stats for `pollutant` experiments
-    dvar_avg, dvar_std, dvar_ens_std = stats.compute_stats(dvar)
+    dvar_avg, dvar_std, dvar_std_err = stats.compute_stats(dvar)
 
     # Compute climate sensitivity, radiative forcing and `variable` scaling factors
-    c_scaling = (dvar_avg / CO2_dT_avg) / (dRF_avg / CO2_dRF_avg)
-    RF_scaling = dRF_avg / dRF[HadGEM3]
+    c_scaling = (dvar_avg / co2_dtemp_avg) / (drf_avg / co2_drf_avg)
+    rf_scaling = drf_avg / drf[HadGEM3]
     var_scaling = dvar_avg / dvar[HadGEM3]
 
     # Compute climate sensitivity scaling factor for error propagation
-    c_scaling_prop = (dvar_avg / CO2_dT_avg) * CO2_dRF_avg
+    c_scaling_prop = (dvar_avg / co2_dtemp_avg) * co2_drf_avg
 
     # Compute uncertainty in climate sensitivity scaling factor
     c_scaling_error = np.abs(c_scaling) * np.sqrt(
-        (dvar_ens_std/dvar_avg)**2 +
-        (CO2_dT_ens_std/CO2_dT_avg)**2 +
-        (CO2_dRF_ens_std/CO2_dRF_avg)**2 +
-        (dRF_ens_std/dRF_avg)**2
+        (dvar_std_err/dvar_avg)**2 +
+        (co2_dtemp_std_err/co2_dtemp_avg)**2 +
+        (co2_drf_std_err/co2_drf_avg)**2 +
+        (drf_std_err/drf_avg)**2
     )
 
-    return var_scaling, RF_scaling, c_scaling, c_scaling_error, c_scaling_prop
+    return var_scaling, rf_scaling, c_scaling, c_scaling_error, c_scaling_prop
