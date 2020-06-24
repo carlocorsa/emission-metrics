@@ -113,11 +113,11 @@ def get_mm_scaling(pollutant, variable):
     c_scaling_prop = (dvar_avg / co2_dtemp_avg) * co2_drf_avg
 
     # Compute uncertainty in climate sensitivity scaling factor
-    c_scaling_error = np.abs(c_scaling) * np.sqrt(
+    c_scaling_std_err = np.abs(c_scaling) * np.sqrt(
         (dvar_std_err/dvar_avg)**2 +
         (co2_dtemp_std_err/co2_dtemp_avg)**2 +
         (co2_drf_std_err/co2_drf_avg)**2 +
         (drf_std_err/drf_avg)**2
     )
 
-    return var_scaling, rf_scaling, c_scaling, c_scaling_error, c_scaling_prop
+    return var_scaling, rf_scaling, c_scaling, c_scaling_std_err, c_scaling_prop
