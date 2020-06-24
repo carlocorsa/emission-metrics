@@ -12,7 +12,30 @@ DATA_PATH = "../data/"
 
 
 def get_so2_regional_uncertainty(emission_region):
+    """Get uncertainty in regional SO2 ERF.
 
+    Parameters
+    ----------
+    emission_region: str
+        The name of the emission region.
+        Must be one of the following options:
+        - NHML
+        - US
+        - China
+        - EastAsia
+        - India
+        - Europe
+
+    Returns
+    -------
+    ctl_pert_avg: float
+        Average ERF difference between perturbation and
+        control experiments.
+
+    ctl_pert_std_err: float
+        Standard error of the average ERF difference between
+        perturbation and control experiments.
+    """
 
     assert emission_region in constants.EMISS_REGIONS, \
         "{} is not an accepted emission region for SO2.".format(emission_region)
@@ -42,21 +65,47 @@ def get_so2_regional_uncertainty(emission_region):
     pert_rf_avg, pert_rf_std, pert_rf_std_err = stats.compute_stats(pert_rf_glo)
 
     # Compute covariance of control and perturbation experiments
-    ctl_pert_rf_cov = np.cov(ctl_rf_glo, pert_rf_glo)[0][1]
-    # TODO: this is wrong - fix it
-    ctl_pert_rf_ens_cov = ctl_pert_rf_cov / np.sqrt(np.count_nonzero(~np.isnan(ctl_rf_glo)))
+    ctl_pert_rf_cov = stats.compute_covariance(ctl_rf_glo, pert_rf_glo, std_err=True)
 
     # Compute average and standard deviation of control and perturbation difference
     ctl_pert_avg = ctl_rf_avg - pert_rf_avg
-    ctl_pert_std = np.sqrt(ctl_rf_std_err**2 + pert_rf_std_err**2 - 2 * ctl_pert_rf_ens_cov)
+    ctl_pert_std_err = np.sqrt(ctl_rf_std_err**2 + pert_rf_std_err**2 - 2 * ctl_pert_rf_cov)
 
-    return ctl_pert_avg, ctl_pert_std
+    return ctl_pert_avg, ctl_pert_std_err
 
 
 def get_bc_regional_uncertainty(emission_region):
+    """Get uncertainty in regional SO2 ERF.
+
+    Parameters
+    ----------
+    emission_region: str
+        The name of the emission region.
+        Must be one of the following options:
+        - Global
+        - Asia
+
+    Returns
+    -------
+    ctl_pert_rf_avg: float
+        Average ERF difference between perturbation and
+        control experiments.
+
+    ctl_pert_rf_std_err: float
+        Standard error of the average ERF difference between
+        perturbation and control experiments.
+
+    ctl_pert_rfa_avg: float
+        Average ERFa difference between perturbation and
+        control experiments.
+
+    ctl_pert_rfa_std_err: float
+        Standard error of the average ERFa difference between
+        perturbation and control experiments.
+    """
 
     assert emission_region in constants.BC_EMISS_REGIONS, \
-            "{} is not an accepted emission region for BC".format(emission_region)
+        "{} is not an accepted emission region for BC".format(emission_region)
 
     # Load change in radiative forcing
     with open(os.path.join(DATA_PATH, 'pdrmip/PDRMIP_mean_dERFt.json')) as f:
@@ -70,13 +119,13 @@ def get_bc_regional_uncertainty(emission_region):
         ctl_pert_rf_avg = np.mean(
             [mean_derf_t[k]['10xBC_'] for k, v in mean_derf_t.items() if '10xBC_' in mean_derf_t[k].keys()]
         )
-        pert_rf_std = np.std(
+        ctl_pert_rf_std = np.std(
             [mean_derf_t[k]['10xBC_'] for k, v in mean_derf_t.items() if '10xBC_' in mean_derf_t[k].keys()]
         )
         ctl_pert_rfa_avg = np.mean(
             [mean_derf_a[k]['10xBC_'] for k, v in mean_derf_a.items() if '10xBC_' in mean_derf_a[k].keys()]
         )
-        pert_rfa_std = np.std(
+        ctl_pert_rfa_std = np.std(
             [mean_derf_a[k]['10xBC_'] for k, v in mean_derf_a.items() if '10xBC_' in mean_derf_a[k].keys()]
         )
 
@@ -88,17 +137,17 @@ def get_bc_regional_uncertainty(emission_region):
         ctl_pert_rf_avg = np.mean(
             [mean_derf_t[k]['10xBCAsia'] for k, v in mean_derf_t.items() if '10xBCAsia' in mean_derf_t[k].keys()]
         )
-        pert_rf_std = np.std(
+        ctl_pert_rf_std = np.std(
             [mean_derf_t[k]['10xBCAsia'] for k, v in mean_derf_t.items() if '10xBCAsia' in mean_derf_t[k].keys()]
         )
         ctl_pert_rfa_avg = np.mean(
             [mean_derf_a[k]['10xBCAsia'] for k, v in mean_derf_a.items() if '10xBCAsia' in mean_derf_a[k].keys()]
         )
-        pert_rfa_std = np.std(
+        ctl_pert_rfa_std = np.std(
             [mean_derf_a[k]['10xBCAsia'] for k, v in mean_derf_a.items() if '10xBCAsia' in mean_derf_a[k].keys()]
         )
 
-    pert_rf_std_err = pert_rf_std / np.sqrt(n_exps)
-    pert_rfa_std_err = pert_rfa_std / np.sqrt(n_exps)
+    ctl_pert_rf_std_err = ctl_pert_rf_std / np.sqrt(n_exps)
+    ctl_pert_rfa_std_err = ctl_pert_rfa_std / np.sqrt(n_exps)
 
-    return ctl_pert_rf_avg, pert_rf_std_err, ctl_pert_rfa_avg, pert_rfa_std_err
+    return ctl_pert_rf_avg, ctl_pert_rf_std_err, ctl_pert_rfa_avg, ctl_pert_rfa_std_err
