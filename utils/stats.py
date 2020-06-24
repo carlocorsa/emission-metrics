@@ -41,3 +41,34 @@ def compute_ratio_std(avg_a, avg_b, std_a, std_b, cov):
     )
 
     return ratio_std
+
+
+def compute_covariance(var_a, var_b, std_err=False):
+    """Compute covariance between variable A and variable B using Numpy function.
+    If `std_err` is True, compute the covariance using the standard error instead
+    of the standard deviation.
+
+    Parameters
+    ----------
+    var_a: array-like
+        Variable A.
+
+    var_b: array-like
+        Variable B.
+
+    std_err: boolean (default=False)
+        If True, compute the covariance using the standard error.
+        If False, compute the covariance using the standard deviation.
+
+    Return
+    ------
+    cov_ab: float
+        Covariance between variable A and variable B.
+    """
+
+    cov_ab = np.cov(var_a, var_b, ddof=1)[0][1]
+
+    if std_err:
+        cov_ab = cov_ab / np.sqrt(np.count_nonzero(~np.isnan(var_a)) * np.count_nonzero(~np.isnan(var_b)))
+
+    return cov_ab
