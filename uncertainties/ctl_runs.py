@@ -42,7 +42,7 @@ def get_model_variability(response_region):
     
     # Create DataFrames filled with NaN values
     if response_region == 'All regions':
-        region_names= input_selection.get_response_regions()
+        region_names = input_selection.get_response_regions()
         n_regions = len(region_names)
         temp_avg = [[np.nan for _ in range(N)] for __ in range(n_regions)]
         precip_avg = [[np.nan for _ in range(N)] for __ in range(n_regions)]
