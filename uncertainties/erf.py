@@ -7,6 +7,7 @@ import json
 from netCDF4 import Dataset
 
 # Local application imports
+from rem.simulations import loading
 from rem.utils import stats, constants
 
 # Local paths
@@ -14,7 +15,7 @@ DATA_PATH = "../data/"
 
 
 def get_so2_regional_uncertainty(emission_region):
-    """Get uncertainty in regional SO2 ERF.
+    """Get uncertainty in global ERF from regional emissions of SO2.
 
     Parameters
     ----------
@@ -42,6 +43,10 @@ def get_so2_regional_uncertainty(emission_region):
     assert emission_region in constants.EMISS_REGIONS, \
         "{} is not an accepted emission region for SO2.".format(emission_region)
 
+    # Get grid cell areas and the response region (rr) mask
+    areas = loading.load_grid_areas()
+    total_area = np.ma.sum(np.ma.sum(areas))
+
     # Load control and perturbation experiments
     path = os.path.join(DATA_PATH, 'SO2/TOA_RF_tseries/')
     ctl_path = os.path.join(path, 'HadGEM3_Atmos_Control_25yr_RF_tseries.nc')
@@ -54,12 +59,16 @@ def get_so2_regional_uncertainty(emission_region):
     ctl_erf = ctl.variables['field200'][:] - (ctl.variables['field201'][:] + ctl.variables['olr'][:])
     pert_erf = pert.variables['field200'][:] - (pert.variables['field201'][:] + pert.variables['olr'][:])
 
+    # Compute average global radiative forcing
+    ctl_glo_erf = np.squeeze(np.sum(np.sum(ctl_erf * areas, axis=3), axis=2)) / total_area
+    pert_glo_erf = np.squeeze(np.sum(np.sum(pert_erf * areas, axis=3), axis=2)) / total_area
+
     # Compute radiative forcing stats
-    ctl_erf_avg, ctl_erf_std, ctl_erf_std_err = stats.compute_stats(ctl_erf)
-    pert_erf_avg, pert_erf_std, pert_erf_std_err = stats.compute_stats(pert_erf)
+    ctl_erf_avg, ctl_erf_std, ctl_erf_std_err = stats.compute_stats(ctl_glo_erf)
+    pert_erf_avg, pert_erf_std, pert_erf_std_err = stats.compute_stats(pert_glo_erf)
 
     # Compute covariance of control and perturbation experiments
-    ctl_pert_erf_cov = stats.compute_covariance(ctl_erf, pert_erf, std_err=True)
+    ctl_pert_erf_cov = stats.compute_covariance(ctl_glo_erf, pert_glo_erf, std_err=True)
 
     # Compute average and standard deviation of control and perturbation difference
     ctl_pert_avg = pert_erf_avg - ctl_erf_avg
@@ -69,7 +78,7 @@ def get_so2_regional_uncertainty(emission_region):
 
 
 def get_bc_regional_uncertainty(emission_region):
-    """Get uncertainty in regional SO2 ERF.
+    """Get uncertainty in global ERF from regional emissions of BC.
 
     Parameters
     ----------
@@ -116,6 +125,10 @@ def get_bc_regional_uncertainty(emission_region):
         pert_name = '10xBC_'
     else:
         pert_name = '10xBCAsia'
+        mean_erf_t.pop('CanESM2', None)
+        mean_erf_a.pop('CanESM2', None)
+        mean_erf_t.pop('HadGEM2', None)
+        mean_erf_a.pop('HadGEM2', None)
 
     # Load ERF for control and perturbation experiments
     ctl_erf = [mean_erf_t[k]['base'] for k, v in mean_erf_t.items() if 'base' in mean_erf_t[k].keys()]
@@ -149,7 +162,7 @@ def get_bc_regional_uncertainty(emission_region):
 
 
 def get_global_uncertainty(pollutant):
-    """Get uncertainty in global ERF.
+    """Get uncertainty in ERF from global emissions.
 
     Parameters
     ----------
