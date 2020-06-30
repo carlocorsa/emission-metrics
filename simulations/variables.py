@@ -29,10 +29,10 @@ def compute_climate_variables(response_regions, grid_delta_temp, grid_delta_prec
     temp_avg: float
         Average global temperature differences.
 
-    rr_precip_avg: float
+    rr_precip_avg: array of floats
         Array of average regional precipitation differences.
 
-    precip_avg: array of floats
+    precip_avg: float
         Average global precipitation differences.
     """
 
@@ -98,8 +98,9 @@ def compute_radiative_efficiency(pollutant, emission_region, response_regions):
 
     Returns
     -------
-    rr_rad_eff: float
-        Change in regional radiative efficiency.
+    rr_rad_eff: array of floats
+        Change in regional radiative efficiency for all
+        regions in `response_regions`.
 
     rad_eff: float
         Change in global radiative efficiency.
