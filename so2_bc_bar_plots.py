@@ -1,9 +1,18 @@
+# Standard library imports
+import os
+
+# Third party imports
+from matplotlib import pyplot as plt
+
 # Local application imports
 from rem.simulations import loading, variables, input_selection
 from rem.metrics import slp
 from rem.uncertainties import propagation
 from rem.utils import constants
 from rem.plotting import bar_plots
+
+# Figure path
+FIGURE_PATH = "../figures/"
 
 # Define input variables
 pollutants = ['SO2', 'BC']
@@ -93,3 +102,7 @@ for pol in pollutants:
 
 # Plot iARTP
 bar_plots.plot_so2_bc_double_bars(iartp_dict, iartp_std_dict, response_regions, potential_name="iARTP")
+
+# Save figure
+fig_name = 'SO2_BC_{}_bar_plot.pdf'.format("iARTP")
+plt.savefig(os.path.join(FIGURE_PATH, fig_name))
