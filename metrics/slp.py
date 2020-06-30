@@ -24,27 +24,24 @@ def compute_atp(pollutant, rad_eff, th):
         - CH4
 
     rad_eff: float
-        Radiative efficiency for CO2 experiments.
+        Radiative efficiency for single-lifetime pollutant experiments.
 
     th: int
         Time horizon.
 
     Returns
     -------
-    iatp: float
-        Integrated absolute (either regional or global) temperature potential.
+    iatp: float or array of floats
+        Integrated absolute (either regional or global) temperature potentials.
 
-    atp: float
-        Pulse absolute (either regional or global) temperature potential.
-
+    atp: float or array of floats
+        Pulse absolute (either regional or global) temperature potentials.
     """
 
     assert pollutant in constants.SLP, "{} is not an accepted pollutant".format(pollutant)
 
     # Load constants
     tau = constants.SPECS[pollutant]['tau']
-    fp = constants.SPECS[pollutant]['fp']
-    k = constants.SPECS[pollutant]['k']
 
     # Get scaled climate sensitivity
     c_scaled = variables.get_scaled_climate_sensitivity(pollutant)
@@ -77,38 +74,42 @@ def compute_app(pollutant, rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
         - CH4
 
     rad_eff: float
-        Global radiative efficiency for CO2 experiments.
+        Global radiative efficiency change due to
+        perturbation of `pollutant`.
 
     rad_eff_a: float
-        Atmospheric component of the radiative efficiency for CO2 experiments.
+        Change in the atmospheric component of the radiative
+        efficiency due to perturbation of `pollutant`.
 
     th: int
         Time horizon.
 
     rr_precip_avg: float
-        Average regional precipitation difference.
+        Average regional precipitation difference
+        due to perturbation of `pollutant`.
 
     precip_avg: float
-        Global regional precipitation difference.
+        Global regional precipitation difference
+        due to perturbation of `pollutant`.
 
     Returns
     -------
-    iarpp: float
+    iarpp: array of floats
         Integrated Absolute Regional Precipitation Potential (iARPP).
 
-    slow_iarpp: float
+    slow_iarpp: array of floats
         Slow response component of the iARPP.
 
-    fast_iarpp: float
+    fast_iarpp: array of floats
         Fast response component of the iARPP.
 
-    arpp: float
+    arpp: array of floats
         Pulse Absolute Regional Precipitation Potential (ARPP).
 
-    slow_arpp: float
+    slow_arpp: array of floats
         Slow response component of the ARPP.
 
-    fast_arpp: float
+    fast_arpp: array of floats
         Fast response component of the ARPP.
     """
 
