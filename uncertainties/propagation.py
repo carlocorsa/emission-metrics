@@ -1,5 +1,5 @@
+# Third party imports
 import numpy as np
-import pandas as pd
 
 # Local application imports
 from rem.simulations import input_selection, scaling
@@ -7,10 +7,8 @@ from rem.uncertainties import erf, climate_variables
 from rem.utils import constants
 
 
-def get_potential_uncertainties(pollutant, emission_region, response_regions):
+def get_potential_uncertainties(pollutant, emission_region, response_regions, artp, slow_arpp, fast_arpp):
     """Get propagated uncertainties for the ARTP and the ARPP.
-    N.B. To get the full uncertainties the returned values will need to be
-    multiplied by the absolute value of the corresponding potential.
 
     Parameters
     ----------
@@ -38,18 +36,22 @@ def get_potential_uncertainties(pollutant, emission_region, response_regions):
     response_regions: list of str
         Names of the response regions.
 
+    artp: array of floats
+        Pulse or integrated ARTP.
+
+    slow_arpp: array of floats
+        Slow component of either the pulse or integrated ARPP.
+
+    fast_arpp: array of floats
+        Fast component of either the pulse or integrated ARPP.
+
     Returns
     -------
-    artp_total_std: array of floats
+    artp_std: array of floats
         Propagated uncertainty for the ARTP for all `response_regions`.
 
-    slow_arpp_total_std: array of floats
-        Propagated uncertainty for the slow component of the ARPP
-        for all `response_regions`.
-
-    fast_arpp_total_std: array of floats
-        Propagated uncertainty for the fast component of the ARPP
-        for all `response_regions`.
+    arpp_std: array of floats
+        Propagated uncertainty for the ARPP for all `response_regions`.
     """
 
     assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
@@ -100,14 +102,13 @@ def get_potential_uncertainties(pollutant, emission_region, response_regions):
     c_scaling_avg, c_scaling_std_err = scaling.get_mm_scaling(pollutant, 'temperature')[2:4]
 
     # Compute uncertainties for all response regions
-    artp_total_std = []
-    slow_arpp_total_std = []
-    fast_arpp_total_std = []
+    artp_std = []
+    slow_arpp_std = []
+    fast_arpp_std = []
 
     for i in range(n_regions):
 
-        # The following needs to be multiplied by the total function to obtain the final uncertainty
-        artp_total_std.append(
+        artp_std.append(
             np.sqrt(
                 (reg_erf_std_err / reg_erf_avg) ** 2 +
                 (glo_erf_std_err / glo_erf_avg) ** 2 +
@@ -116,7 +117,7 @@ def get_potential_uncertainties(pollutant, emission_region, response_regions):
             )
         )
 
-        slow_arpp_total_std.append(
+        slow_arpp_std.append(
             np.sqrt(
                 (reg_erf_std_err / reg_erf_avg) ** 2 +
                 (glo_erf_std_err / glo_erf_avg) ** 2 +
@@ -126,7 +127,7 @@ def get_potential_uncertainties(pollutant, emission_region, response_regions):
             )
         )
 
-        fast_arpp_total_std.append(
+        fast_arpp_std.append(
             np.sqrt(
                 (reg_erfa_std_err / reg_erfa_avg) ** 2 +
                 (glo_erfa_std_err / glo_erfa_avg) ** 2 +
@@ -134,5 +135,12 @@ def get_potential_uncertainties(pollutant, emission_region, response_regions):
             )
         )
 
-    return np.array(artp_total_std), np.array(slow_arpp_total_std), np.array(fast_arpp_total_std)
+    # Compute artp propagated standard deviation
+    artp_std = abs(artp) * np.array(artp_std)
 
+    # Compute arpp propagated standard deviation
+    slow_arpp_std = abs(slow_arpp) * np.array(slow_arpp_std)
+    fast_arpp_std = abs(fast_arpp) * np.array(fast_arpp_std)
+    arpp_std = np.sqrt(slow_arpp_std ** 2 + fast_arpp_std ** 2)
+
+    return artp_std, arpp_std
