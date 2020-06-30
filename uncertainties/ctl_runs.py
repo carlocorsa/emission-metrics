@@ -7,7 +7,7 @@ import numpy as np
 from netCDF4 import Dataset
 
 # Local application imports
-from rem.simulations import loading, input_selection, regions
+from rem.simulations import loading, regions
 
 # Local paths
 DATA_PATH = "../data/ctl/"
@@ -16,14 +16,14 @@ DATA_PATH = "../data/ctl/"
 N = 6
 
 
-def get_model_variability(response_region):
+def get_model_variability(response_regions):
     """Get temperature and precipitation averages from different simulations
     and corresponding standard deviations.
 
     Parameters
     ----------
-    response_region: str
-        Name of the response region in which to
+    response_regions: list of str
+        Names of the response regions in which to
         measure model variability.
 
     Returns
@@ -39,22 +39,16 @@ def get_model_variability(response_region):
 
     # Load grid cell areas
     areas = loading.load_grid_areas()
-    
+
     # Create DataFrames filled with NaN values
-    if response_region == 'All regions':
-        region_names = input_selection.get_response_regions()
-        n_regions = len(region_names)
-        temp_avg = [[np.nan for _ in range(N)] for __ in range(n_regions)]
-        precip_avg = [[np.nan for _ in range(N)] for __ in range(n_regions)]
-    else:
-        region_names = [response_region, 'Global']
-        n_regions = len(region_names)
-        temp_avg = [[np.nan for _ in range(N)] for __ in range(n_regions)]
-        precip_avg = [[np.nan for _ in range(N)] for __ in range(n_regions)]
+    n_regions = len(response_regions)
+
+    temp_avg = [[np.nan for _ in range(N)] for __ in range(n_regions)]
+    precip_avg = [[np.nan for _ in range(N)] for __ in range(n_regions)]
 
     columns = ['Model1', 'Model2', 'Model3', 'Model4', 'Model5', 'Model6']
-    region_temp_df = pd.DataFrame(index=region_names, columns=columns)
-    region_precip_df = pd.DataFrame(index=region_names, columns=columns)
+    region_temp_df = pd.DataFrame(index=response_regions, columns=columns)
+    region_precip_df = pd.DataFrame(index=response_regions, columns=columns)
     
     for i in range(N):
         # Load control files
@@ -65,7 +59,7 @@ def get_model_variability(response_region):
 
         # Loop through relevant regions
         for j in range(n_regions):
-            region = region_names[j]
+            region = response_regions[j]
 
             # Compute average regional temperature and precipitation
             region_mask = regions.get_region_mask(region)
