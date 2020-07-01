@@ -142,7 +142,7 @@ def compute_radiative_efficiency(pollutant, emission_region, response_regions):
 
         rad_eff = erf / delta_emiss_mass
 
-        rad_eff_a = erf_a * delta_emiss_mass
+        rad_eff_a = erf_a / delta_emiss_mass
 
     else:
         rr_rad_eff = erf * (rr_temp_avg / temp_avg) / (delta_emiss_mass * constants.SPECS[pollutant]['tau'])
