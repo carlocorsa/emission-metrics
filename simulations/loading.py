@@ -225,12 +225,12 @@ def load_emissions(pollutant, emission_region):
         bc_emissions = np.squeeze(emission_data.variables['emibc'])
         emission_data.close()
 
-        # TODO: check whether emission region should always be Asia
         # Get the emission difference (the factor 9 is because the experiments are 10xBC) from the emission region
         masked_delta_emissions = bc_emissions * regions.get_region_mask(emission_region) * 9
 
-        # Compute the mass released in each grid cell
-        masked_delta_emiss_mass = areas * masked_delta_emissions
+        # Convert emissions from kg/m2/s to Tg/yr and
+        # compute the mass released in each grid cell
+        masked_delta_emiss_mass = areas * masked_delta_emissions * 3600 * 24 * 365 * 1e-9
 
         # Compute the total emission mass
         delta_emiss_mass = np.ma.sum(np.ma.sum(masked_delta_emiss_mass))
