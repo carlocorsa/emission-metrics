@@ -36,6 +36,14 @@ BC_EMISS_REGIONS = ['Global', 'Asia']
 # Scenario types
 SCENARIOS = ['linear', 'sustained', 'quadratic']
 
+# Mathematical notation for pollutants
+NOTATIONS = {
+    'SO2': '$SO_2$',
+    'BC': 'BC',
+    'CH4': '$CH_4$',
+    'CO2': '$CO_2$'
+}
+
 # Pollutant specific constants
 SPECS = {
 
