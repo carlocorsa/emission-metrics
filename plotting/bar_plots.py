@@ -133,8 +133,9 @@ def plot_so2_bc_subplot(
 
 def plot_so2_bc_double_bars(potential_dict, std_dict, response_regions, potential_name, th_a=20, th_b=100):
 
-    assert potential_name in ['iARTP', 'iARPP'], \
-        "{} is not an accepted potential name. Accepted potential names are "
+    assert potential_name in ['iARTP', 'iARPP'], (
+        "{} is not an accepted potential name. Accepted potential names are 'ARTP', 'ARPP'".format(potential_name)
+    )
 
     if potential_name == 'iARTP':
         y_label = 'iARTP (K Tg$^{-1}$)'
@@ -170,3 +171,109 @@ def plot_so2_bc_double_bars(potential_dict, std_dict, response_regions, potentia
                 subplot_idx += 1
 
     plt.subplots_adjust(top=0.95, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.28)
+
+
+def plot_ch4_co2_subplot(
+        pollutant, response_regions, potentials, potential_a, potential_b,
+        std_a, std_b, subplot_idx, th_a=20, th_b=100
+):
+
+    n_regions = len(response_regions)
+
+    assert len(potential_a[potentials[pollutant]]) == n_regions, (
+        "Potential A has {} elements but instead should have {} elements.".format(
+            len(potential_a[potentials[pollutant]]), n_regions
+        )
+    )
+
+    assert len(potential_b[potentials[pollutant]]) == n_regions, (
+        "Potential B has {} elements but instead should have {} elements.".format(
+            len(potential_b[potentials[pollutant]]), n_regions
+        )
+    )
+
+    # Use capital letters to identify the different regions
+    region_ids = list(string.ascii_uppercase)[0:n_regions]
+
+    # Define bar positions
+    bar_a = [i + 0.08 for i in range(1, n_regions + 1)]
+    bar_b = [i + 0.48 for i in range(1, n_regions + 1)]
+
+    # Define X ticks position
+    x_ticks = [i + 0.43 for i in range(1, n_regions + 1)]
+
+    # Identify the subplot to use
+    ax = plt.subplot(1, 3, subplot_idx)
+
+    # Plot bars
+    plt.bar(
+        bar_a, potential_a[potentials[pollutant]], align='edge', width=BW, label='H = {} yr'.format(th_a),
+        yerr=std_a[potentials[pollutant]], color='C0'
+    )
+    plt.bar(
+        bar_b, potential_b[potentials[pollutant]], align='edge', width=BW, label='H = {} yr'.format(th_b),
+        yerr=std_b[potentials[pollutant]], color='orange'
+    )
+
+    # Plot dashed line at y=0
+    plt.plot([0, n_regions + 2], [0, 0], 'k', linestyle='--', linewidth=1)
+    plt.xlim([0, n_regions + 2])
+
+    # Add x-axis ticks and labels
+    plt.xticks(x_ticks, region_ids, ha='center', rotation=0, fontsize=FS-3)
+
+    # Select y-axis label
+    if potentials[pollutant] in ['ARTP', 'iARTP']:
+        y_label = '{} (K Tg$^{{-1}}$)'.format(potentials[pollutant])
+
+    else:
+        y_label = '{} (mm day$^{{-1}}$ Tg$^{{-1}}$)'.format(potentials[pollutant])
+
+    # Add y-axis ticks and label
+    plt.yticks(fontsize=FS-2)
+    plt.ylabel(y_label, fontsize=FS-1)
+    plt.gca().get_yaxis().get_major_formatter().set_powerlimits((0, 0))
+
+    # Add title
+    plt.title(pollutant, fontsize=FS+2)
+
+    # Add legend
+    if subplot_idx == 2:
+
+        ax.legend(bbox_to_anchor=(2, 1.05), fontsize=FS)
+
+        text1 = [[region_ids[i] + ': ' + response_regions[i]] for i in range(0, n_regions // 2)]
+        text2 = [[region_ids[i] + ': ' + response_regions[i]] for i in range(n_regions // 2, n_regions)]
+
+        t1 = ax.table(cellText=text1, bbox=(1.3, 0, 1, 0.8), edges='open', cellLoc='left')
+        t2 = ax.table(cellText=text2, bbox=(1.7, 0, 1, 0.8), edges='open', cellLoc='left')
+        t1.auto_set_font_size(False)
+        t1.set_fontsize(FS)
+        t2.auto_set_font_size(False)
+        t2.set_fontsize(FS)
+
+
+def plot_ch4_co2_double_bars(potential_dict, std_dict, response_regions, potentials, th_a=20, th_b=100):
+
+    plt.figure(figsize=(12, 4))
+
+    subplot_idx = 1
+
+    for pol in ['CH4', 'CO2']:
+
+        plot_ch4_co2_subplot(
+            pollutant=pol,
+            response_regions=response_regions,
+            potentials=potentials,
+            potential_a=potential_dict[pol][th_a],
+            potential_b=potential_dict[pol][th_b],
+            std_a=std_dict[pol][th_a],
+            std_b=std_dict[pol][th_b],
+            subplot_idx=subplot_idx,
+            th_a=th_a,
+            th_b=th_b
+        )
+
+        subplot_idx += 1
+
+    plt.subplots_adjust(top=0.90, bottom=0.10, left=0.10, right=0.95, hspace=0.25, wspace=0.28)
