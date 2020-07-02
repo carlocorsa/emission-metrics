@@ -74,14 +74,24 @@ def get_so2_regional_uncertainty(emission_region):
     ctl_pert_avg = pert_erf_avg - ctl_erf_avg
     ctl_pert_std_err = np.sqrt(ctl_erf_std_err**2 + pert_erf_std_err**2 - 2 * ctl_pert_erf_cov)
 
+    # Close loaded datasets
+    ctl.close()
+    pert.close()
+
     return ctl_pert_avg, ctl_pert_std_err
 
 
-def get_bc_regional_uncertainty(emission_region):
+def get_regional_uncertainty(pollutant, emission_region):
     """Get uncertainty in global ERF from regional emissions of BC.
 
     Parameters
     ----------
+    pollutant: str
+        One of the following three options:
+        - BC
+        - CO2
+        - CH4
+
     emission_region: str
         The name of the emission region.
         Must be one of the following options:
@@ -107,8 +117,10 @@ def get_bc_regional_uncertainty(emission_region):
         perturbation and control experiments.
     """
 
-    assert emission_region in constants.BC_EMISS_REGIONS, \
-        "{} is not an accepted emission region for BC".format(emission_region)
+    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant.".format(pollutant)
+
+    if pollutant == 'S02':
+        raise ValueError('SO2 is not an accepted pollutant.')
 
     # Load change in radiative forcing
     with open(os.path.join(DATA_PATH, 'pdrmip/PDRMIP_mean_ERFt.json')) as f:
@@ -116,19 +128,29 @@ def get_bc_regional_uncertainty(emission_region):
     with open(os.path.join(DATA_PATH, 'pdrmip/PDRMIP_mean_ERFa.json')) as f:
         mean_erf_a = json.load(f)
 
-    # Remove model without BC experiments (MPI-ESM)
-    mean_erf_t.pop('MPI-ESM', None)
-    mean_erf_a.pop('MPI-ESM', None)
+    if pollutant == 'BC':
+        assert emission_region in constants.BC_EMISS_REGIONS, \
+            "{} is not an accepted emission region for BC".format(emission_region)
 
-    # Select correct experiment name
-    if emission_region == 'Global':
-        pert_name = '10xBC_'
+        # Remove model without BC experiments (MPI-ESM)
+        mean_erf_t.pop('MPI-ESM', None)
+        mean_erf_a.pop('MPI-ESM', None)
+
+        # Select correct experiment name
+        if emission_region == 'Global':
+            pert_name = '10xBC_'
+        else:
+            pert_name = '10xBCAsia'
+            mean_erf_t.pop('CanESM2', None)
+            mean_erf_a.pop('CanESM2', None)
+            mean_erf_t.pop('HadGEM2', None)
+            mean_erf_a.pop('HadGEM2', None)
+
+    elif pollutant == 'CH4':
+        pert_name = '3xCH4'
+
     else:
-        pert_name = '10xBCAsia'
-        mean_erf_t.pop('CanESM2', None)
-        mean_erf_a.pop('CanESM2', None)
-        mean_erf_t.pop('HadGEM2', None)
-        mean_erf_a.pop('HadGEM2', None)
+        pert_name = '2xCO2'
 
     # Load ERF for control and perturbation experiments
     ctl_erf = [mean_erf_t[k]['base'] for k, v in mean_erf_t.items() if 'base' in mean_erf_t[k].keys()]
@@ -192,7 +214,7 @@ def get_global_uncertainty(pollutant):
         perturbation and control experiments.
     """
 
-    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
+    assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant.".format(pollutant)
 
     path = os.path.join(DATA_PATH, 'pdrmip/extracts/')
 
