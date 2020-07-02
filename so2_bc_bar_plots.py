@@ -5,11 +5,11 @@ import os
 from matplotlib import pyplot as plt
 
 # Local application imports
-from rem.simulations import loading, variables, input_selection
-from rem.metrics import slp
-from rem.uncertainties import propagation
-from rem.utils import constants
-from rem.plotting import bar_plots
+from simulations import loading, variables, input_selection
+from metrics import slp
+from uncertainties import propagation
+from utils import constants
+from plotting import bar_plots
 
 # Figure path
 FIGURE_PATH = "../figures/"

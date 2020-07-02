@@ -5,17 +5,17 @@ import os
 from matplotlib import pyplot as plt
 
 # Local application imports
-from rem.simulations import loading, variables, input_selection
-from rem.metrics import slp, co2
-from rem.uncertainties import propagation
-from rem.plotting import bar_plots
+from simulations import loading, variables, input_selection
+from metrics import slp, co2
+from uncertainties import propagation
+from plotting import bar_plots
 
 # Figure path
 FIGURE_PATH = "../figures/"
 
 # Define input variables
 pollutants = ['CH4', 'CO2']
-emission_region = 'NHML'  # the emission region is not important for CO2 and CH4
+emission_region = 'NHML'
 response_regions = input_selection.get_response_regions()
 time_horizons = [20, 100]
 
