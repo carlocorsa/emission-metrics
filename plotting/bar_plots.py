@@ -135,7 +135,7 @@ def plot_so2_bc_subplot(
     if subplot_idx == 8:
 
         ax.legend(bbox_to_anchor=(2, 0.4), fontsize=FS)
-        ax.text(1.6, 0.4, 'BC', fontsize=FS+7, transform=plt.gca().transAxes)
+        ax.text(1.6, 0.4, '$BC$', fontsize=FS+7, transform=plt.gca().transAxes)
 
 
 def plot_so2_bc_double_bars(potential_dict, std_dict, response_regions, potential_name, th_a=20, th_b=100):
