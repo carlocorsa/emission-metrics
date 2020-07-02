@@ -104,12 +104,12 @@ for pol in pollutants:
 bar_plots.plot_so2_bc_double_bars(iartp_dict, iartp_std_dict, response_regions, potential_name="iARTP")
 
 # Save figure
-fig_name = 'SO2_BC_{}_bar_plot.pdf'.format("iARTP")
+fig_name = 'SO2_BC_iARTP_bar_plot.pdf'
 plt.savefig(os.path.join(FIGURE_PATH, fig_name))
 
 # Plot iARPP
 bar_plots.plot_so2_bc_double_bars(iarpp_dict, iarpp_std_dict, response_regions, potential_name="iARPP")
 
 # Save figure
-fig_name = 'SO2_BC_{}_bar_plot.pdf'.format("iARPP")
+fig_name = 'SO2_BC_iARPP_bar_plot.pdf'
 plt.savefig(os.path.join(FIGURE_PATH, fig_name))
