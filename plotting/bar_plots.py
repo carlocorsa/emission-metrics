@@ -4,6 +4,9 @@ import string
 # Third party imports
 from matplotlib import pyplot as plt
 
+# Local application import
+from utils import constants
+
 # Font size
 FS = 13
 
@@ -49,13 +52,6 @@ ORDER = {
     ]
 }
 
-# Define pollutant notations
-NAMES = {
-    'SO2': '$SO_2$',
-    'BC': 'BC',
-    'CH4': '$CH_4$',
-    'CO2': '$CO_2$'
-}
 
 def plot_so2_bc_subplot(
         pollutant, emission_region, response_regions, potential_a, potential_b,
@@ -242,7 +238,7 @@ def plot_ch4_co2_subplot(
     plt.gca().get_yaxis().get_major_formatter().set_powerlimits((0, 0))
 
     # Add title
-    tit = NAMES[pollutant]
+    tit = constants.NOTATIONS[pollutant]
     plt.title(tit, fontsize=FS+2)
 
     # Add legend
