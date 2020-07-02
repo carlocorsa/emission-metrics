@@ -81,19 +81,15 @@ def get_potential_uncertainties(pollutant, emission_region, response_regions, ar
         reg_precip_avg, glo_precip_avg, precip_ratio_std_err = climate_variables.get_climate_stats(region_names)
 
     # Get ERF regional uncertainties
-    if pollutant == 'BC':
-        reg_erf_avg, reg_erf_std_err, reg_erfa_avg, reg_erfa_std_err = erf.get_bc_regional_uncertainty(emission_region)
-
-    elif pollutant == 'SO2':
+    if pollutant == 'SO2':
         reg_erf_avg, reg_erf_std_err = erf.get_so2_regional_uncertainty(emission_region)
         reg_erfa_avg = fp * reg_erf_avg
         reg_erfa_std_err = np.abs(fp) * reg_erf_std_err
 
     else:
-        reg_erf_avg = 1
-        reg_erf_std_err = 0
-        reg_erfa_avg = 1
-        reg_erfa_std_err = 0
+        reg_erf_avg, reg_erf_std_err, reg_erfa_avg, reg_erfa_std_err = erf.get_regional_uncertainty(
+            pollutant, emission_region
+        )
 
     # Get ERF global uncertainties
     glo_erf_avg, glo_erf_std_err, glo_erfa_avg, glo_erfa_std_err = erf.get_global_uncertainty(pollutant)
