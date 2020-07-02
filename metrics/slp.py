@@ -78,8 +78,8 @@ def compute_app(pollutant, rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
         perturbation of `pollutant`.
 
     rad_eff_a: float
-        Change in the atmospheric component of the radiative
-        efficiency due to perturbation of `pollutant`.
+        Change in the atmospheric component of the global
+        radiative efficiency due to perturbation of `pollutant`.
 
     th: int
         Time horizon.

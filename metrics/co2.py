@@ -78,7 +78,8 @@ def compute_app(rad_eff, rad_eff_a, th, rr_precip_avg, precip_avg):
         Global radiative efficiency for CO2 experiments.
 
     rad_eff_a: float
-        Atmospheric component of the radiative efficiency for CO2 experiments.
+        Atmospheric component of the global
+        radiative efficiency for CO2 experiments.
 
     th: int
         Time horizon.
