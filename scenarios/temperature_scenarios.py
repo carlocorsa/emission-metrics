@@ -21,8 +21,8 @@ def compute_time_step_temperature(index, emissions, artp, time_step=0.01):
     emissions: list of floats
         List of emission values.
 
-    artp: list of floats
-        List of ARTP values.
+    artp: array-like
+        Array of ARTP values.
 
     time_step: float (default=0.01)
         Length in years of the time step used
@@ -86,8 +86,8 @@ def compute_mixed_scenarios_temperature(
         Each time horizon must be larger than the
         previous one, eg, [30, 60, 100].
 
-    artp: list of floats
-        A list of ARTP values covering the maximum
+    artp: array-like
+        Array of ARTP values covering the maximum
         time horizon considered.
         Must have a length equal to:
         max(time_horizons) * (1 / time_step)
