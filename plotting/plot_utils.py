@@ -34,4 +34,4 @@ def optimal_xticks(x_max, n_points):
         xt = np.linspace(n_ceil / 10, n_ceil, 10)
         xtl = np.linspace(x_ceil / 10, x_ceil, 10).astype(int)
 
-    return [xt, xtl]
+    return xt, xtl
