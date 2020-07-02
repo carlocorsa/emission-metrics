@@ -49,6 +49,13 @@ ORDER = {
     ]
 }
 
+# Define pollutant notations
+NAMES = {
+    'SO2': '$SO_2$',
+    'BC': 'BC',
+    'CH4': '$CH_4$',
+    'CO2': '$CO_2$'
+}
 
 def plot_so2_bc_subplot(
         pollutant, emission_region, response_regions, potential_a, potential_b,
@@ -112,7 +119,7 @@ def plot_so2_bc_subplot(
     if subplot_idx == 5:
 
         ax.legend(bbox_to_anchor=(2, 0.7), fontsize=FS)
-        ax.text(1.6, 0.7, 'SO2', fontsize=FS+7, transform=plt.gca().transAxes)
+        ax.text(1.6, 0.7, '$SO_2$', fontsize=FS+7, transform=plt.gca().transAxes)
 
         text1 = [[region_ids[i] + ': ' + response_regions[i]] for i in range(0, n_regions // 2)]
         text2 = [[region_ids[i] + ': ' + response_regions[i]] for i in range(n_regions // 2, n_regions)]
@@ -235,7 +242,8 @@ def plot_ch4_co2_subplot(
     plt.gca().get_yaxis().get_major_formatter().set_powerlimits((0, 0))
 
     # Add title
-    plt.title(pollutant, fontsize=FS+2)
+    tit = NAMES[pollutant]
+    plt.title(tit, fontsize=FS+2)
 
     # Add legend
     if subplot_idx == 2:
