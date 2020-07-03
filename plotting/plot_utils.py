@@ -35,3 +35,34 @@ def optimal_xticks(x_max, n_points):
         xtl = np.linspace(x_ceil / 10, x_ceil, 10).astype(int)
 
     return xt, xtl
+
+
+def get_change_strings(magnitudes):
+    """Get the correct strings for plotting mixed emission scenarios.
+
+    Parameters
+    ----------
+    magnitudes: list
+        Magnitudes for each emission scenario.
+
+    Returns
+    -------
+    change_strings: list
+        Strings for each emission scenario.
+        Each element can be either of "increase up to"
+        or "decrease down to".
+    """
+
+    change_strings = []
+    if magnitudes[0] > 100:
+        change_strings.append("increase up to")
+    else:
+        change_strings.append("decrease down to")
+
+    for i, mag in enumerate(magnitudes[1:]):
+        if mag > magnitudes[i-1]:
+            change_strings.append("increase up to")
+        else:
+            change_strings.append("decrease down to")
+
+    return change_strings
