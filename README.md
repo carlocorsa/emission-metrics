@@ -98,12 +98,12 @@ Usage examples can be found in the following scripts:
 
 * [so2_bc_bar_plots.py](so2_bc_bar_plots.py): computes and plots all regional temperature and precipitation potentials for emissions of SO<sub>2</sub> and BC from all emission regions.
 
-![so2_bc_bar_plots](figures/SO2_BC_iARTP_bar_plot.pdf)
+![so2_bc_bar_plots](figures/SO2_BC_iARTP_bar_plot.png)
 
 * [ch4_co2_bar_plots.py](ch4_co2_bar_plots.py): computes and plots all regional temperature and precipitation potentials for emissions of CH4<sub>4</sub> and CO<sub>2</sub>.
 
-![ch4_co2_bar_plots](figures/CH4_CO2_ARPP_bar_plot.pdf.pdf)
+![ch4_co2_bar_plots](figures/CH4_CO2_ARPP_bar_plot.png)
 
 * [so2_co2_mixed_temp_scenario.py](so2_co2_mixed_temp_scenario.py): computes and plots the temperature variation due to mixed emission scenarios of SO<sub>2</sub> and CO<sub>2</sub>.
 
-![temp_mixed_scenarios](figures/SO2_CO2_temp_mixed_scenario_NHML_Europe.pdf)
+![temp_mixed_scenarios](figures/SO2_CO2_temp_mixed_scenario_NHML_Europe.png)
