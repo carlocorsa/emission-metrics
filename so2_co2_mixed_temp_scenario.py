@@ -1,11 +1,19 @@
+# Standard library imports
+import os
+
 # Third party imports
 import numpy as np
+from matplotlib import pyplot as plt
 
 # Local application imports
 from simulations import loading, variables
 from metrics import co2, slp
 from scenarios import temperature_scenarios
 from uncertainties import propagation
+from plotting import mixed_scenarios
+
+# Figure path
+FIGURE_PATH = "../figures/"
 
 # Define input variables
 pollutants = ['SO2', 'CO2']
@@ -113,3 +121,12 @@ for pol in pollutants:
     temp_dict[pol]['std'] = np.array(temp_std)
 
     print("Temperature for {:3s} computed.".format(pol))
+
+# Plot figure
+mixed_scenarios.plot_temp_mixed_scenario(
+    temp_dict, time_horizons, scenarios, magnitudes, emission_region, response_regions[0]
+)
+
+# Save figure
+fig_name = '{}_temp_mixed_scenario_{}_{}.pdf'.format('_'.join(pollutants), emission_region, response_regions[0])
+plt.savefig(os.path.join(FIGURE_PATH, fig_name))
