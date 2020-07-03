@@ -20,7 +20,7 @@ The following pollutants are supported:
 * CH<sub>4</sub>
 * CO<sub>2</sub>
 
-The following emission regions for SO<sub>2</sub>:
+The following emission regions can be used for SO<sub>2</sub>:
 
 * Northern Hemisphere Mid Latitudes
 * United States
@@ -80,17 +80,17 @@ pip install -r requirements_with_version.txt
 
 The repository consists of many modules grouped within different directories:
 
-* [simulations](simulations): this directory contains modules to select input values for the calculations, load and calculate variables from stored simulation files, define regions, apply scaling based on PDRMIP multi-model means.
+* [simulations](simulations): this directory contains modules to select input values for the response calculations, load and calculate variables from stored simulation files, define regions, apply scaling based on PDRMIP multi-model means.
 
-* [metrics](metrics): this directory contains modules to compute regional metrics for the different pollutants
+* [metrics](metrics): this directory contains modules to compute regional metrics for the different pollutants.
 
-* [scenarios](scenarios): this directory contains modules to compute temperature responses to different emission scenarios
+* [scenarios](scenarios): this directory contains modules to compute temperature responses to different emission scenarios.
 
-* [plotting](plotting): this directory contains modules for plotting responses
+* [plotting](plotting): this directory contains modules for plotting responses.
 
-* [uncertainties](uncertainties): this directory contains modules to compute and propagate uncertainties
+* [uncertainties](uncertainties): this directory contains modules to compute and propagate uncertainties.
 
-* [utils](utils): this directory contains utility modules (e.g., with statistical functions)
+* [utils](utils): this directory contains utility modules (e.g., with statistical functions).
 
 ## Examples
 
