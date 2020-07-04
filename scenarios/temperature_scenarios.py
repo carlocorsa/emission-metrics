@@ -2,8 +2,8 @@
 import numpy as np
 
 # Local application imports
-from rem.utils import constants
-from rem.simulations import loading
+from sutils import constants
+from simulations import loading
 
 # Load constants
 A0 = constants.SPECS['CO2']['a0']
