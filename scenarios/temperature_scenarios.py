@@ -2,7 +2,7 @@
 import numpy as np
 
 # Local application imports
-from sutils import constants
+from utils import constants
 from simulations import loading
 
 # Load constants
