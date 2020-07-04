@@ -2,7 +2,7 @@
 
 ## About
 
-This repository allows to compute climate regional responses to the regional emissions of different pollutants based on global climate model simulations.  
+This repository contains modules that allow to compute climate regional responses to the regional emissions of different pollutants based on global climate model simulations.  
 
 The following responses can be calculated:
 
