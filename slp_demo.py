@@ -1,6 +1,6 @@
 # Local application imports
-from rem.simulations import loading, variables
-from rem.metrics import slp
+from simulations import loading, variables
+from metrics import slp
 
 # Define input variables
 time_horizon = 100

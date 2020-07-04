@@ -1,7 +1,7 @@
 # Local application imports
-from rem.simulations import input_selection
-from rem.uncertainties import ctl_runs
-from rem.utils import stats
+from simulations import input_selection
+from uncertainties import ctl_runs
+from utils import stats
 
 
 def get_climate_stats(response_regions):

@@ -2,8 +2,8 @@
 import numpy as np
 
 # Local application imports
-from rem.utils import constants
-from rem.simulations import loading, regions, input_selection, scaling
+from utils import constants
+from simulations import loading, regions, input_selection, scaling
 
 
 def compute_climate_variables(response_regions, grid_delta_temp, grid_delta_precip):

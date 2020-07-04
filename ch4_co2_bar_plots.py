@@ -11,7 +11,7 @@ from uncertainties import propagation
 from plotting import bar_plots
 
 # Figure path
-FIGURE_PATH = "../figures/"
+FIGURE_PATH = "figures/"
 
 # Define input variables
 pollutants = ['CH4', 'CO2']

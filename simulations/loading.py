@@ -7,10 +7,10 @@ from netCDF4 import Dataset
 from scipy.io import readsav
 
 # Local application imports
-from rem.utils import constants
-from rem.simulations import regions
+from utils import constants
+from simulations import regions
 
-DATA_PATH = "../data/"
+DATA_PATH = "data/"
 
 
 def get_file_paths(pollutant, emission_region):

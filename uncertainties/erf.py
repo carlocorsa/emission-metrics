@@ -7,11 +7,11 @@ import json
 from netCDF4 import Dataset
 
 # Local application imports
-from rem.simulations import loading
-from rem.utils import stats, constants
+from simulations import loading
+from utils import stats, constants
 
 # Local paths
-DATA_PATH = "../data/"
+DATA_PATH = "data/"
 
 
 def get_so2_regional_uncertainty(emission_region):

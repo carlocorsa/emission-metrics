@@ -7,10 +7,10 @@ import numpy as np
 from netCDF4 import Dataset
 
 # Local application imports
-from rem.simulations import loading, regions
+from simulations import loading, regions
 
 # Local paths
-DATA_PATH = "../data/ctl/"
+DATA_PATH = "data/ctl/"
 
 # Number of control simulations
 N = 6

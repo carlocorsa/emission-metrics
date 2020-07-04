@@ -2,7 +2,7 @@
 import numpy as np
 
 # Local application imports
-from rem.utils import stats, constants
+from utils import stats, constants
 
 # Index of HadGEM3 - model used for SO2 simulations
 HadGEM3 = 3

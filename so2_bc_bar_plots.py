@@ -12,7 +12,7 @@ from utils import constants
 from plotting import bar_plots
 
 # Figure path
-FIGURE_PATH = "../figures/"
+FIGURE_PATH = "figures/"
 
 # Define input variables
 pollutants = ['SO2', 'BC']

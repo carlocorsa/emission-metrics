@@ -2,9 +2,9 @@
 import numpy as np
 
 # Local application imports
-from rem.simulations import input_selection, scaling
-from rem.uncertainties import erf, climate_variables
-from rem.utils import constants
+from simulations import input_selection, scaling
+from uncertainties import erf, climate_variables
+from utils import constants
 
 
 def get_potential_uncertainties(pollutant, emission_region, response_regions, artp, slow_arpp, fast_arpp):

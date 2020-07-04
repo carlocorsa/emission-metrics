@@ -6,10 +6,10 @@ import json
 import numpy as np
 
 # Local application imports
-from rem.utils import constants
+from utils import constants
 
 # Local paths
-PDRMIP_PATH = "../data/pdrmip/"
+PDRMIP_PATH = "data/pdrmip/"
 
 # Response regions dictionary
 RESPONSE_REGION_OPTIONS = {

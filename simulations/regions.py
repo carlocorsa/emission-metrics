@@ -5,7 +5,7 @@ import os
 import numpy as np
 from netCDF4 import Dataset
 
-DATA_PATH = "../data/ctl/ctl_0/"
+DATA_PATH = "data/ctl/ctl_0/"
 
 
 def get_region_mask(region):
