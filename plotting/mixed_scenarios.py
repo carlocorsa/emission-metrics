@@ -126,3 +126,5 @@ def plot_temp_mixed_scenario(
         response_region, " and ".join(pollutants), emission_region
     )
     plt.title(title, fontsize=FS + 2)
+
+    plt.show()

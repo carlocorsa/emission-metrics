@@ -175,6 +175,8 @@ def plot_so2_bc_double_bars(potential_dict, std_dict, response_regions, potentia
 
     plt.subplots_adjust(top=0.95, bottom=0.08, left=0.10, right=0.95, hspace=0.25, wspace=0.28)
 
+    plt.show()
+
 
 def plot_ch4_co2_subplot(
         pollutant, response_regions, potentials, potential_a, potential_b,
@@ -281,3 +283,5 @@ def plot_ch4_co2_double_bars(potential_dict, std_dict, response_regions, potenti
         subplot_idx += 1
 
     plt.subplots_adjust(top=0.90, bottom=0.10, left=0.10, right=0.95, hspace=0.25, wspace=0.28)
+
+    plt.show()
