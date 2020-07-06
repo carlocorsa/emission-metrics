@@ -53,9 +53,9 @@ def get_file_paths(pollutant, emission_region):
     assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
 
     if pollutant == 'SO2':
-        ctl_path = os.path.join(DATA_PATH, "SO2/ctl_150year_avg.nc")
-        pert_file = os.listdir(os.path.join(DATA_PATH, "SO2/No_SO2_{}/".format(emission_region)))[0]
-        pert_path = os.path.join(DATA_PATH, "SO2/No_SO2_{}/".format(emission_region), pert_file)
+        ctl_path = os.path.join(DATA_PATH, "so2/ctl_150year_avg.nc")
+        pert_file = os.listdir(os.path.join(DATA_PATH, "so2/No_SO2_{}/".format(emission_region)))[0]
+        pert_path = os.path.join(DATA_PATH, "so2/No_SO2_{}/".format(emission_region), pert_file)
     else:
         ctl_path = os.path.join(DATA_PATH, "pdrmip/regridded_files/base_mm_mean.nc")
 
