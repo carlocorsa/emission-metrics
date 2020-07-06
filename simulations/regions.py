@@ -5,13 +5,13 @@ import os
 import numpy as np
 from netCDF4 import Dataset
 
-DATA_PATH = "data/ctl/ctl_0/"
+DATA_PATH = "data/ctl/"
 
 
 def get_region_mask(region):
     """Get the grid mask for the specified region."""
 
-    path = os.path.join(DATA_PATH, "xizka_150year_avg.nc")
+    path = os.path.join(DATA_PATH, "sample_ctl_file.nc")
     data = Dataset(path, mode='r')
 
     lat = data.variables['latitude'][:]
