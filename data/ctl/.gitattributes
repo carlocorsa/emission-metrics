@@ -1,1 +1,7 @@
 sample_ctl_file.nc filter=crypt diff=crypt merge=crypt
+0_150.nc filter=crypt diff=crypt merge=crypt
+1_150.nc filter=crypt diff=crypt merge=crypt
+2_150.nc filter=crypt diff=crypt merge=crypt
+3_150.nc filter=crypt diff=crypt merge=crypt
+4_150.nc filter=crypt diff=crypt merge=crypt
+5_150.nc filter=crypt diff=crypt merge=crypt
