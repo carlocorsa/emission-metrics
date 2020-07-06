@@ -1,0 +1,5 @@
+HadGEM3_atmos_10xBC_global_tseries_15.nc filter=crypt diff=crypt merge=crypt
+HadGEM3_atmos_2xCO2_global_tseries_15.nc filter=crypt diff=crypt merge=crypt
+HadGEM3_atmos_3xCH4_global_tseries_15.nc filter=crypt diff=crypt merge=crypt
+HadGEM3_atmos_5xSO4_global_tseries_15.nc filter=crypt diff=crypt merge=crypt
+HadGEM3_atmos_ctl_global_tseries_15.nc filter=crypt diff=crypt merge=crypt
