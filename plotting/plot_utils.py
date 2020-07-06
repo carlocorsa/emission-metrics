@@ -62,9 +62,9 @@ def get_change_strings(magnitudes):
         change_strings.append("decrease down to")
 
     for i, mag in enumerate(magnitudes[1:]):
-        if mag > magnitudes[i-1]:
+        if mag > magnitudes[i]:
             change_strings.append("increase up to")
-        elif mag == magnitudes[i-1]:
+        elif mag == magnitudes[i]:
             change_strings.append("emissions at")
         else:
             change_strings.append("decrease down to")
