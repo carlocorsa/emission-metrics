@@ -9,7 +9,7 @@ SRC_PATH = "data/so2_original/"
 DST_PATH = "data/so2/"
 
 
-def copy_selected_variables(file_a, file_b, variables):
+def copy_selected_variables(file_a, file_b, vars_to_copy):
 
     with netCDF4.Dataset(file_a) as src, netCDF4.Dataset(file_b, "w") as dst:
 
@@ -26,14 +26,23 @@ def copy_selected_variables(file_a, file_b, variables):
 
         # Copy all file data for selected variables
         for name, variable in src.variables.items():
-            if name in variables:
-                x = dst.createVariable(name, variable.datatype, variable.dimensions)
+            if name in vars_to_copy:
+                x = dst.createVariable(
+                    varname=name,
+                    datatype=variable.datatype,
+                    dimensions=variable.dimensions
+                ),
+
+                # Copy variable attributes all at once via dictionary
+                dst.variables[name].setncatts(src[name].__dict__)
+
+                # Copy variable values
                 dst.variables[name][:] = src.variables[name][:]
 
 
 if __name__ == '__main__':
 
-    vars_to_copy = ['longitude', 'latitude', 't', 'surface', 'temp', 'precip', 'field569', 'field569_1']
+    variables = ['longitude', 'latitude', 't', 'surface', 'temp', 'precip', 'field569', 'field569_1']
 
     for folder in os.listdir(SRC_PATH):
 
@@ -49,5 +58,5 @@ if __name__ == '__main__':
                 copy_selected_variables(
                     file_a=os.path.join(src_folder_path, file),
                     file_b=os.path.join(dst_folder_path, file),
-                    variables=vars_to_copy
+                    vars_to_copy=variables
                 )
