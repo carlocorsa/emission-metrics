@@ -1,7 +1,0 @@
-HadGEM3_Atmos_Control_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
-HadGEM3_Atmos_noSO2_China_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
-HadGEM3_Atmos_noSO2_EastAsia_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
-HadGEM3_Atmos_noSO2_Europe_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
-HadGEM3_Atmos_noSO2_India_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
-HadGEM3_Atmos_noSO2_NHML_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
-HadGEM3_Atmos_noSO2_US_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
