@@ -19,10 +19,7 @@ def copy_selected_variables(file_a, file_b, vars_to_copy):
 
         # Copy dimensions
         for name, dimension in src.dimensions.items():
-            if dimension.isunlimited():
-                dst.createDimension(name, None)
-            else:
-                dst.createDimension(name, len(dimension))
+            dst.createDimension(name, (len(dimension) if not dimension.isunlimited() else None))
 
         # Copy all file data for selected variables
         for name, variable in src.variables.items():
@@ -31,13 +28,13 @@ def copy_selected_variables(file_a, file_b, vars_to_copy):
                     varname=name,
                     datatype=variable.datatype,
                     dimensions=variable.dimensions
-                ),
+                )
 
                 # Copy variable attributes all at once via dictionary
-                dst.variables[name].setncatts(src[name].__dict__)
+                dst[name].setncatts(src[name].__dict__)
 
                 # Copy variable values
-                dst.variables[name][:] = src.variables[name][:]
+                dst[name][:] = src[name][:]
 
 
 if __name__ == '__main__':
