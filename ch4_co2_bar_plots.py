@@ -128,4 +128,3 @@ bar_plots.plot_ch4_co2_double_bars(pot_dict, std_dict, response_regions, potenti
 # Save figure
 fig_name = 'CH4_CO2_ARTP_bar_plot.pdf'
 plt.savefig(os.path.join(FIGURE_PATH, fig_name))
-
