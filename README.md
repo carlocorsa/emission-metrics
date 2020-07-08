@@ -57,7 +57,7 @@ pip install -r requirements_with_version.txt
 
 ### Data encryption
 
-The data included in the repository has been encrypted with [transcrypt](https://github.com/elasticdog/transcrypt), a script to configure transparent encryption of sensitive files stored in a Git repository.
+The data included in this repository has been encrypted with [transcrypt](https://github.com/elasticdog/transcrypt), a script to configure transparent encryption of sensitive files stored in a Git repository.
 In order to use the data, transcrypt needs to be installed in your machine:
 
 ```bash
@@ -68,13 +68,13 @@ sudo ln -s ${PWD}/transcrypt /usr/local/bin/transcrypt
 
 For more details see the [installation document](https://github.com/elasticdog/transcrypt/blob/master/INSTALL.md).
 
-To initialise the cloned repository and have access to the encrypted data files, use the command:
+To initialise the cloned repository and have access to the encrypted data files, use the command (within the repository):
 
 ```bash
-transcrypt -c aes-256-cbc -p 'pwd'
+transcrypt -c aes-256-cbc -p 'password'
 ```
 
-where `pwd` is the password used to encrypt the repository. Please send an email to carlo.corsaro@gmail.com to get the password.
+where `password` is the password used to encrypt the repository. Please send an email to carlo.corsaro@gmail.com to get the password.
 
 ## Modules description
 
