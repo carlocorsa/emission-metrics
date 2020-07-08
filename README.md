@@ -33,7 +33,7 @@ git clone https://github.com/carlocorsa/rem.git
 you need to create a python environment with all required packages. 
 Please note the automated installation has been tested using `conda` on OS X and Ubuntu 18.04.
 
-1. Using `conda`
+#### Using conda
 
 Create the environment `rem` and install all the required packages by running the command:
 
@@ -41,7 +41,7 @@ Create the environment `rem` and install all the required packages by running th
 bash install_conda_env.sh
 ```
 
-2. Using `pip`
+#### Using pip
 
 Install all packages needed using the `requirements.txt` file:
 
