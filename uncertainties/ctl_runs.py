@@ -56,6 +56,7 @@ def get_model_variability(response_regions):
         data = Dataset(os.path.join(DATA_PATH, file_name), mode='r')
         temp = data.variables['temp'][0][0]
         precip = data.variables['precip'][0][0]
+        data.close()
 
         # Loop through relevant regions
         for j in range(n_regions):

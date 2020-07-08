@@ -264,4 +264,8 @@ def get_global_uncertainty(pollutant):
     ctl_pert_erfa_avg = pert_erfa_avg - ctl_erfa_avg
     ctl_pert_erfa_std_err = np.sqrt(ctl_erfa_std_err**2 + pert_erfa_std_err**2 - 2 * ctl_pert_erfa_cov)
 
+    # Close open datasets
+    ctl.close()
+    pert.close()
+
     return ctl_pert_erf_avg, ctl_pert_erf_std_err, ctl_pert_erfa_avg, ctl_pert_erfa_std_err

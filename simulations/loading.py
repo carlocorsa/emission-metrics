@@ -150,7 +150,7 @@ def load_climate_variables(pollutant, emission_region):
     grid_delta_temp = pert_temp - temp
     grid_delta_precip = pert_precip - precip
 
-    # Close datasets
+    # Close open datasets
     ctl_data.close()
     pert_data.close()
 
@@ -241,5 +241,9 @@ def load_emissions(pollutant, emission_region):
 
     elif pollutant == 'CO2':
         delta_emiss_mass = 2891000
+
+    # Close open datasets
+    ctl_data.close()
+    pert_data.close()
 
     return delta_emiss_mass
