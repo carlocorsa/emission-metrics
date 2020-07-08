@@ -218,6 +218,10 @@ def load_emissions(pollutant, emission_region):
         # Compute the total emission mass
         delta_emiss_mass = np.ma.sum(np.ma.sum(delta_so2))
 
+        # Close open datasets
+        ctl_data.close()
+        pert_data.close()
+
     elif pollutant == 'BC':
         # Load BC emissions
         emission_path = os.path.join(DATA_PATH, "pdrmip/emissions/regridded_aerocom_BC_emissions_2006.nc")
@@ -241,9 +245,5 @@ def load_emissions(pollutant, emission_region):
 
     elif pollutant == 'CO2':
         delta_emiss_mass = 2891000
-
-    # Close open datasets
-    ctl_data.close()
-    pert_data.close()
 
     return delta_emiss_mass
