@@ -128,13 +128,13 @@ def compute_radiative_efficiency(pollutant, emission_region, response_regions):
 
     # Compute regional and global radiative efficiency for the different pollutants
     if pollutant == 'SO2':
-        rr_rad_eff = ((erf * scaling.get_mm_scaling(pollutant, 'temperature')[1]) * (rr_temp_avg / temp_avg) /
+        rr_rad_eff = ((erf * scaling.get_mm_scaling(pollutant)[1]) * (rr_temp_avg / temp_avg) /
                       (delta_emiss_mass * constants.SPECS[pollutant]['tau']))
 
-        rad_eff = ((erf * scaling.get_mm_scaling(pollutant, 'temperature')[1]) /
+        rad_eff = ((erf * scaling.get_mm_scaling(pollutant)[1]) /
                    (delta_emiss_mass * constants.SPECS[pollutant]['tau']))
 
-        rad_eff_a = ((erf_a * scaling.get_mm_scaling(pollutant, 'temperature')[1]) /
+        rad_eff_a = ((erf_a * scaling.get_mm_scaling(pollutant)[1]) /
                      (delta_emiss_mass * constants.SPECS[pollutant]['tau']))
 
     elif pollutant == 'CO2':
@@ -160,8 +160,8 @@ def get_scaled_climate_sensitivity(pollutant):
     assert pollutant in constants.POLLUTANTS, "{} is not an accepted pollutant".format(pollutant)
 
     c_scaled = [
-        constants.C1 * scaling.get_mm_scaling(pollutant, 'temperature')[2],
-        constants.C2 * scaling.get_mm_scaling(pollutant, 'temperature')[2]
+        constants.C1 * scaling.get_mm_scaling(pollutant)[2],
+        constants.C2 * scaling.get_mm_scaling(pollutant)[2]
     ]
 
     return c_scaled

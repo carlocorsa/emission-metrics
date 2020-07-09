@@ -95,7 +95,7 @@ def get_potential_uncertainties(pollutant, emission_region, response_regions, ar
     glo_erf_avg, glo_erf_std_err, glo_erfa_avg, glo_erfa_std_err = erf.get_global_uncertainty(pollutant)
 
     # Get uncertainty in scaling factor of climate sensitivity
-    c_scaling_avg, c_scaling_std_err = scaling.get_mm_scaling(pollutant, 'temperature')[2:4]
+    c_scaling_avg, c_scaling_std_err = scaling.get_mm_scaling(pollutant)[2:4]
 
     # Compute uncertainties for all response regions
     artp_std = []
