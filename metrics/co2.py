@@ -2,8 +2,8 @@
 import numpy as np
 
 # Local application imports
-from rem.utils import constants
-from rem.simulations import variables
+from utils import constants
+from simulations import variables
 
 # Load constants
 D = constants.D
