@@ -8,118 +8,95 @@ from matplotlib import pyplot as plt
 # Local application imports
 from simulations import loading, variables
 from metrics import slp
-from uncertainties import propagation
+from plotting import sensitivity
 
 # Figure path
 FIGURE_PATH = "figures/"
 
 # Define input variables
-pollutants = 'SO2'
+pollutant = 'SO2'
 emission_region = 'Europe'
 response_regions = ['Global']
 time_horizon = 100
-time_step = 0.01
+time_step = 0.03
 n_steps = 1 / time_step
 
-# Create dictionaries to store results for
-# different potentials and pollutants
-temp_dict = dict()
-
-for pol in pollutants:
-
-    temp_dict[pol] = dict()
-
-    # Load and compute climate variables average variations
-    grid_delta_temp, grid_delta_precip = loading.load_climate_variables(
-        pollutant=pol,
-        emission_region=emission_region
-    )
-
-    rr_temp_avg, temp_avg, rr_precip_avg, precip_avg = variables.compute_climate_variables(
-        response_regions=response_regions,
-        grid_delta_temp=grid_delta_temp,
-        grid_delta_precip=grid_delta_precip
-    )
-
-    # Compute radiative efficiencies
-    rr_rad_eff, rad_eff, rad_eff_a = variables.compute_radiative_efficiency(
-        pollutant=pol,
-        emission_region=emission_region,
-        response_regions=response_regions
-    )
-
-    # Compute temperature potentials at each time step
-    artp_list = []
-    slow_arpp_list = []
-    fast_arpp_list = []
-
-    for t in np.linspace(time_step, time_horizons[-1], int(time_horizons[-1] * n_steps)):
-
-        if pol == 'CO2':
-            _, artp = co2.compute_atp(
-                rad_eff=rr_rad_eff,
-                th=t
-            )
-
-            _, _, _, arpp, slow_arpp, fast_arpp = co2.compute_app(
-                rad_eff=rad_eff,
-                rad_eff_a=rad_eff_a,
-                th=t,
-                rr_precip_avg=rr_precip_avg,
-                precip_avg=precip_avg
-            )
-
-        else:
-            _, artp = slp.compute_atp(
-                pollutant=pol,
-                rad_eff=rr_rad_eff,
-                th=t
-            )
-
-            _, _, _, _, slow_arpp, fast_arpp = slp.compute_app(
-                pollutant=pol,
-                rad_eff=rad_eff,
-                rad_eff_a=rad_eff_a,
-                th=t,
-                rr_precip_avg=rr_precip_avg,
-                precip_avg=precip_avg
-            )
-
-        artp_list.append(artp[0])
-        slow_arpp_list.append(slow_arpp[0])
-        fast_arpp_list.append(fast_arpp[0])
-
-    # Convert list to arrays
-    artp_array = np.array(artp_list).ravel()
-    slow_arpp_array = np.array(slow_arpp_list).ravel()
-    fast_arpp_array = np.array(fast_arpp_list).ravel()
-
-    # Compute temperature in different scenarios
-    temp_response = temperature_scenarios.compute_mixed_scenarios_temperature(
-            pol, emission_region, magnitudes[pol], scenarios, time_horizons, artp_array, time_step
-    )
-
-    # Compute uncertainties
-    temp_std, _ = propagation.get_potential_uncertainties(
-        pollutant=pol,
-        emission_region=emission_region,
-        response_regions=response_regions,
-        artp=np.array(temp_response).ravel(),
-        slow_arpp=slow_arpp_array,
-        fast_arpp=fast_arpp_array
-    )
-
-    # Store results in dictionaries
-    temp_dict[pol]['temp'] = np.array(temp_response)
-    temp_dict[pol]['std'] = np.array(temp_std)
-
-    print("Temperature for {:3s} computed.".format(pol))
-
-# Plot figure
-mixed_scenarios.plot_temp_mixed_scenario(
-    temp_dict, time_horizons, scenarios, magnitudes, emission_region, response_regions[0]
+# Load and compute climate variables average variations
+grid_delta_temp, grid_delta_precip = loading.load_climate_variables(
+    pollutant=pollutant,
+    emission_region=emission_region
 )
 
+rr_temp_avg, temp_avg, rr_precip_avg, precip_avg = variables.compute_climate_variables(
+    response_regions=response_regions,
+    grid_delta_temp=grid_delta_temp,
+    grid_delta_precip=grid_delta_precip
+)
+
+# Compute radiative efficiencies
+rr_rad_eff, rad_eff, rad_eff_a = variables.compute_radiative_efficiency(
+    pollutant=pollutant,
+    emission_region=emission_region,
+    response_regions=response_regions
+)
+
+# Compute temperature potentials with and without scalings at each time step
+artp_dict = dict()
+iartp_dict = dict()
+
+artp_dict['artp'] = []
+iartp_dict['iartp'] = []
+artp_dict['no_c_artp'] = []
+iartp_dict['no_c_iartp'] = []
+artp_dict['no_erf_artp'] = []
+iartp_dict['no_erf_iartp'] = []
+artp_dict['no_c_no_erf_artp'] = []
+iartp_dict['no_c_no_erf_iartp'] = []
+
+for t in np.linspace(time_step, time_horizon, int(time_horizon * n_steps)):
+
+    iartp, artp = slp.compute_atp(
+        pollutant=pollutant,
+        rad_eff=rr_rad_eff,
+        th=t
+    )
+
+    no_c_iartp, no_c_artp = slp.compute_atp(
+        pollutant=pollutant,
+        rad_eff=rr_rad_eff,
+        th=t,
+        c_scaling=False
+    )
+
+    no_erf_iartp, no_erf_artp = slp.compute_atp(
+        pollutant=pollutant,
+        rad_eff=rr_rad_eff,
+        th=t,
+        erf_scaling=False
+    )
+
+    no_c_no_erf_iartp, no_c_no_erf_artp = slp.compute_atp(
+        pollutant=pollutant,
+        rad_eff=rr_rad_eff,
+        th=t,
+        c_scaling=False,
+        erf_scaling=False
+    )
+
+    artp_dict['artp'].append(artp[0])
+    iartp_dict['iartp'].append(iartp[0])
+    artp_dict['no_c_artp'].append(no_c_artp[0])
+    iartp_dict['no_c_iartp'].append(no_c_iartp[0])
+    artp_dict['no_erf_artp'].append(no_erf_artp[0])
+    iartp_dict['no_erf_iartp'].append(no_erf_iartp[0])
+    artp_dict['no_c_no_erf_artp'].append(no_c_no_erf_artp[0])
+    iartp_dict['no_c_no_erf_iartp'].append(no_c_no_erf_iartp[0])
+
+    print("\rt = {:5.2f}".format(t), flush=True, end=" ")
+
+# Plot figure
+sensitivity.plot_scalings(artp_dict, iartp_dict, time_horizon)
+
 # Save figure
-fig_name = '{}_temp_mixed_scenario_{}_{}.pdf'.format('_'.join(pollutants), emission_region, response_regions[0])
+fig_name = '{}_scalings_{}_{}.pdf'.format(pollutant, emission_region, response_regions[0])
 plt.savefig(os.path.join(FIGURE_PATH, fig_name))
