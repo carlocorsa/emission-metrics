@@ -2,15 +2,15 @@
 import numpy as np
 
 # Local application imports
-from rem.utils import constants
-from rem.simulations import variables
+from utils import constants
+from simulations import variables, scaling
 
 # Load constants
 D = constants.D
 Cf = constants.CF
 
 
-def compute_atp(pollutant, rad_eff, th):
+def compute_atp(pollutant, rad_eff, th, c_scaling=True, erf_scaling=True):
     """Compute integrated and pulse Absolute Temperature Potential (ATP).
     Depending on the radiative efficiency `rad_eff` the returned potentials
     can be either regional or global.
@@ -29,6 +29,12 @@ def compute_atp(pollutant, rad_eff, th):
     th: int
         Time horizon.
 
+    c_scaling: boolean (default=True)
+        If True, apply climate sensitivity multi-model scaling.
+
+    erf_scaling: boolean (default=True)
+        If True, apply radiative forcing multi-model scaling.
+
     Returns
     -------
     iatp: float or array of floats
@@ -44,7 +50,15 @@ def compute_atp(pollutant, rad_eff, th):
     tau = constants.SPECS[pollutant]['tau']
 
     # Get scaled climate sensitivity
-    c_scaled = variables.get_scaled_climate_sensitivity(pollutant)
+    if c_scaling:
+        c_scaled = variables.get_scaled_climate_sensitivity(pollutant)
+    else:
+        c_scaled = [constants.C1, constants.C2]
+
+    # Keep or remove scaling from the radiative forcing
+    if pollutant == 'SO2':
+        if not erf_scaling:
+            rad_eff = rad_eff / scaling.get_mm_scaling(pollutant)[1]
 
     # Compute the integrated absolute temperature potential
     iatp = sum((rad_eff * tau * c_scaled[j] / (tau - D[j])) *
