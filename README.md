@@ -84,13 +84,13 @@ The repository consists of many modules grouped within different packages:
 
 * [metrics](metrics): this package contains modules to compute regional metrics for the different pollutants.
 
-* [scenarios](scenarios): this directory contains modules to compute temperature responses to different emission scenarios.
+* [scenarios](scenarios): this package contains modules to compute temperature responses to different emission scenarios.
 
-* [plotting](plotting): this directory contains modules for plotting responses.
+* [plotting](plotting): this package contains modules for plotting responses.
 
-* [uncertainties](uncertainties): this directory contains modules to compute and propagate uncertainties.
+* [uncertainties](uncertainties): this package contains modules to compute and propagate uncertainties.
 
-* [utils](utils): this directory contains utility modules (e.g., with statistical functions).
+* [utils](utils): this package contains utility modules (e.g., with statistical functions).
 
 ## Examples
 
