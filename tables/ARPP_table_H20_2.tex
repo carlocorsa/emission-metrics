@@ -1,0 +1,35 @@
+\documentclass[preview]{standalone}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{dcolumn}
+\usepackage{caption}
+
+\newcommand{\nm}{\phantom{-}}
+
+\begin{document}
+	\tiny
+	\begin{minipage}{\textwidth}
+		\setlength\tabcolsep{5pt}
+		\begin{tabular}{llllllll}
+			\toprule
+			\textbf{ARPP}       &        &               Europe &                   US &                China &            East Asia &                India &                Sahel \\
+			\textbf{H = 20} & Emis. Reg. &                      &                      &                      &                      &                      &                      \\
+			\midrule
+$SO_2$ & NHML &  -2.4e-06 ±  9.4e-07 &  -1.8e-07 ±  6.9e-08 &  -1.6e-05 ±  6.3e-06 &  -8.8e-06 ±  3.4e-06 &  -2.3e-05 ±  8.8e-06 &  -8.8e-06 ±  3.4e-06 \\
+       & US &  -7.1e-07 ±  3.0e-07 &  -4.0e-06 ±  1.7e-06 &  -1.4e-05 ±  5.7e-06 &  -1.1e-05 ±  4.8e-06 &  -2.2e-05 ±  9.2e-06 &  -5.5e-06 ±  2.3e-06 \\
+       & East Asia &   \nm4.6e-06 ±  2.2e-06 &   \nm1.4e-05 ±  6.9e-06 &  -5.7e-05 ±  2.8e-05 &  -7.1e-05 ±  3.4e-05 &  -6.3e-05 ±  3.0e-05 &  -1.1e-05 ±  5.2e-06 \\
+       & India &   \nm2.8e-06 ±  1.7e-06 &   \nm8.7e-06 ±  5.1e-06 &  -3.5e-05 ±  2.1e-05 &  -4.3e-05 ±  2.5e-05 &  -3.8e-05 ±  2.3e-05 &  -6.5e-06 ±  3.9e-06 \\
+       & Europe &  -1.6e-05 ±  6.8e-06 &  -8.2e-06 ±  3.4e-06 &  -1.7e-05 ±  6.9e-06 &  -4.1e-06 ±  1.7e-06 &  -3.4e-05 ±  1.4e-05 &  -1.2e-05 ±  5.1e-06 \\
+\cmidrule(lr){1-8}
+$BC$ & Global &   \nm1.7e-04 ±  8.2e-05 &   \nm1.9e-04 ±  9.1e-05 &  -1.8e-04 ±  8.5e-05 &  -6.0e-05 ±  2.9e-05 &  -3.3e-04 ±  1.6e-04 &  -3.1e-04 ±  1.5e-04 \\
+       & Asia &   \nm2.8e-05 ±  1.6e-05 &   \nm7.7e-05 ±  4.4e-05 &   \nm5.6e-05 ±  3.1e-05 &  -4.4e-05 ±  2.5e-05 &   \nm9.0e-05 ±  5.1e-05 &   \nm1.0e-05 ±  5.8e-06 \\
+\cmidrule(lr){1-8}
+$CH_4$ & Global &   \nm1.8e-07 ±  9.7e-08 &   \nm1.2e-06 ±  6.3e-07 &   \nm2.0e-06 ±  1.1e-06 &   \nm1.7e-06 ±  9.3e-07 &   \nm2.8e-06 ±  1.5e-06 &   \nm1.0e-06 ±  5.3e-07 \\
+\cmidrule(lr){1-8}
+$CO_2$ & Global &  -1.1e-09 ±  1.3e-09 &   \nm3.4e-09 ±  4.2e-09 &   \nm1.4e-08 ±  1.7e-08 &   \nm9.7e-09 ±  1.2e-08 &   \nm1.6e-08 ±  2.0e-08 &   \nm5.0e-09 ±  6.1e-09 \\
+\bottomrule
+\end{tabular}
+
+        \end{minipage}
+        \end{document}
+        
