@@ -108,6 +108,12 @@ Usage examples can be found in the following scripts:
 
 ![temp_mixed_scenarios](figures/SO2_CO2_temp_mixed_scenario_NHML_Europe.png)
 
+* [potential_tables.py](potential_tables.py): computes temperature and precipitation potentials for all pollutants at different time horizons (defaults are `H = 20` and `H = 100`) and creates `LaTeX` tables that can subsequently edited, if necessary, and transformed into `PDF` or `PNG` files.
+
+![iARTP_100_1](tables/iARTP_table_H100_1.png)
+
+![iARTP_100_2](tables/iARTP_table_H100_2.png)
+
 ## Regions
 
 The following emission regions can be used for SO<sub>2</sub>:
