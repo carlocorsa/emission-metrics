@@ -17,7 +17,7 @@ FIGURE_PATH = "figures/"
 # Define input variables
 pollutants = ['SO2', 'BC']
 emission_regions = {
-    'SO2': constants.EMISS_REGIONS,
+    'SO2': constants.SO2_EMISS_REGIONS,
     'BC': constants.BC_EMISS_REGIONS,
 }
 response_regions = input_selection.get_response_regions()
@@ -98,7 +98,7 @@ for pol in pollutants:
             iartp_std_dict[pol][reg][th] = iartp_std
             iarpp_std_dict[pol][reg][th] = iarpp_std
 
-            print("Pollutant: {:3s} | Region: {:10s} | Time horizon: {:3d} ".format(pol, reg, th))
+            print("Pollutant: {:3s} | Region: {:10s} | Time horizon: {:3d}".format(pol, reg, th))
 
 # Plot iARTP
 bar_plots.plot_so2_bc_double_bars(iartp_dict, iartp_std_dict, response_regions, potential_name="iARTP")
