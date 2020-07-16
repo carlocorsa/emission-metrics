@@ -27,8 +27,8 @@ K = 2.2  # W m-2 K-1
 H1 = 100
 H2 = 20
 
-# List of available emission regions
-EMISS_REGIONS = ['NHML', 'US', 'China', 'EastAsia', 'India', 'Europe']
+# List of available emission regions for SO2
+SO2_EMISS_REGIONS = ['NHML', 'US', 'China', 'EastAsia', 'India', 'Europe']
 
 # List of available emission regions for BC
 BC_EMISS_REGIONS = ['Global', 'Asia']
