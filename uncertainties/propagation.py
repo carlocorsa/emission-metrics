@@ -59,8 +59,8 @@ def get_potential_uncertainties(pollutant, emission_region, response_regions, ar
     if pollutant == 'BC':
         assert emission_region in constants.BC_EMISS_REGIONS, \
             "{} is not an accepted emission region for {}".format(emission_region, pollutant)
-    else:
-        assert emission_region in constants.EMISS_REGIONS, \
+    elif pollutant == 'SO2':
+        assert emission_region in constants.SO2_EMISS_REGIONS, \
             "{} is not an accepted emission region for {}".format(emission_region, pollutant)
 
     # Load constants

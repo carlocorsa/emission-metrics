@@ -121,15 +121,15 @@ def select_emission_region(pollutant, region=None):
 
     # The effective radiative forcing is independent of the emission region for CO2 and CH4
     elif pollutant == 'CO2':
-        erf_t = [np.mean([mean_delta_erf_t[k]['2xCO2'] for k, v in mean_delta_erf_t.items()])] * 6
-        erf_a = [np.mean([mean_delta_erf_a[k]['2xCO2'] for k, v in mean_delta_erf_a.items()])] * 6
+        erf_t = np.mean([mean_delta_erf_t[k]['2xCO2'] for k, v in mean_delta_erf_t.items()])
+        erf_a = np.mean([mean_delta_erf_a[k]['2xCO2'] for k, v in mean_delta_erf_a.items()])
 
     elif pollutant == 'CH4':
-        erf_t = [np.mean([mean_delta_erf_t[k]['3xCH4'] for k, v in mean_delta_erf_t.items()])] * 6
-        erf_a = [np.mean([mean_delta_erf_a[k]['3xCH4'] for k, v in mean_delta_erf_a.items()])] * 6
+        erf_t = np.mean([mean_delta_erf_t[k]['3xCH4'] for k, v in mean_delta_erf_t.items()])
+        erf_a = np.mean([mean_delta_erf_a[k]['3xCH4'] for k, v in mean_delta_erf_a.items()])
 
     emission_region = 0
-    if pollutant != 'BC':
+    if pollutant == 'SO2':
         if region is None:
             while 1 > emission_region or 6 < emission_region:
                 try:
@@ -155,8 +155,8 @@ def select_emission_region(pollutant, region=None):
             print(emission_region_options[emission_region])
 
         else:
-            assert region in constants.EMISS_REGIONS, \
-                "region for {} must be one of {}".format(pollutant, constants.EMISS_REGIONS)
+            assert region in constants.SO2_EMISS_REGIONS, \
+                "region for {} must be one of {}".format(pollutant, constants.SO2_EMISS_REGIONS)
 
             region_name = region
             region_id = next(k for k, v in emission_region_options.items() if v == region_name)
@@ -165,7 +165,7 @@ def select_emission_region(pollutant, region=None):
 
         return region_name, region_erf_t, region_erf_a
 
-    else:
+    elif pollutant == 'BC':
         if region is None:
             while 1 > emission_region or 2 < emission_region:
                 try:
@@ -195,6 +195,19 @@ def select_emission_region(pollutant, region=None):
             region_id = next(k for k, v in bc_emission_region_options.items() if v == region_name)
             region_erf_t = erf_t[region_id - 1]
             region_erf_a = erf_a[region_id - 1]
+
+        return region_name, region_erf_t, region_erf_a
+
+    else:
+        if region is None:
+            region_name = 'Global'
+            print(region_name)
+
+        else:
+            region_name = region
+
+        region_erf_t = erf_t
+        region_erf_a = erf_a
 
         return region_name, region_erf_t, region_erf_a
 

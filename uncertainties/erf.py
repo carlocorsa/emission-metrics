@@ -40,7 +40,7 @@ def get_so2_regional_uncertainty(emission_region):
         perturbation and control experiments.
     """
 
-    assert emission_region in constants.EMISS_REGIONS, \
+    assert emission_region in constants.SO2_EMISS_REGIONS, \
         "{} is not an accepted emission region for SO2.".format(emission_region)
 
     # Get grid cell areas and the response region (rr) mask

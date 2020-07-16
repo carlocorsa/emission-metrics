@@ -28,7 +28,7 @@ def get_file_paths(pollutant, emission_region):
 
     emission_region: str
         The name of the pollutant emission region.
-        For SO2, CO2 and CH4, one of the following options:
+        For SO2 one of the following options:
         - NHML
         - US
         - China
@@ -97,7 +97,7 @@ def load_climate_variables(pollutant, emission_region):
 
     emission_region: str
         The name of the pollutant emission region.
-        For SO2, CO2 and CH4, one of the following options:
+        For SO2 one of the following options:
         - NHML
         - US
         - China
@@ -123,8 +123,8 @@ def load_climate_variables(pollutant, emission_region):
     if pollutant == 'BC':
         assert emission_region in constants.BC_EMISS_REGIONS, \
             "{} is not an accepted emission region for {}".format(emission_region, pollutant)
-    else:
-        assert emission_region in constants.EMISS_REGIONS, \
+    elif pollutant == 'SO2':
+        assert emission_region in constants.SO2_EMISS_REGIONS, \
             "{} is not an accepted emission region for {}".format(emission_region, pollutant)
 
     # Get control and perturbation file paths
@@ -171,7 +171,7 @@ def load_emissions(pollutant, emission_region):
 
     emission_region: str
         The name of the pollutant emission region.
-        For SO2, CO2 and CH4, one of the following options:
+        For SO2 one of the following options:
         - NHML
         - US
         - China

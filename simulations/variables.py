@@ -81,7 +81,7 @@ def compute_radiative_efficiency(pollutant, emission_region, response_regions):
 
     emission_region: str
         The name of the pollutant emission region.
-        For SO2, CO2 and CH4, one of the following options:
+        For SO2 one of the following options:
         - NHML
         - US
         - China
