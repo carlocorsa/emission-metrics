@@ -48,14 +48,14 @@ NOTATIONS = {
 SPECS = {
 
     'SO2': {
-        'tau': 4.35 / 365,  # Wang et al. (2013) (1 SO2 + 4 SO4),
+        'tau': 4.35 / 365,  # Wang et al. (2013) (SO2 -> 0.25) and Fioletov et al. (2015) (SO4 -> 4.1),
         'fp': -0.4,  # Kvalevag et al. (2013) used by Shine et al. (2015),
         'k': 2.678,  # All k values were given by Bjorn from his paper Samset et al. (2018)
         'k_std': 0.317
     },
 
     'BC': {
-        'tau': 6.8 / 365,  # Wang et al. (2014) also cited by Hodnebrog et al. (2014)
+        'tau': 6.8 / 365,  # Schulz et al. (2006)
         'fp': 1,  # because we are using RFa instead of RF -
                   # otherwise use 6.2 from Kvalevag et al. (2013) used by Shine et al. (2015)
         'k': 2.675,
