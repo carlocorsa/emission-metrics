@@ -7,3 +7,10 @@ No_SO2_NorthAmerica/xizkv_150year_avg.nc filter=crypt diff=crypt merge=crypt
 No_SO2_SouthAsia/xkhqa_150year_avg.nc filter=crypt diff=crypt merge=crypt
 No_SO2_US/xizkv_150year_avg.nc filter=crypt diff=crypt merge=crypt
 ctl_150year_avg.nc filter=crypt diff=crypt merge=crypt
+TOA_RF_tseries/HadGEM3_Atmos_Control_25yr_RF_tseries.nc  filter=crypt diff=crypt merge=crypt
+TOA_RF_tseries/HadGEM3_Atmos_noSO2_China_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
+TOA_RF_tseries/HadGEM3_Atmos_noSO2_EastAsia_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
+TOA_RF_tseries/HadGEM3_Atmos_noSO2_Europe_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
+TOA_RF_tseries/HadGEM3_Atmos_noSO2_India_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
+TOA_RF_tseries/HadGEM3_Atmos_noSO2_NHML_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
+TOA_RF_tseries/HadGEM3_Atmos_noSO2_US_25yr_RF_tseries.nc filter=crypt diff=crypt merge=crypt
