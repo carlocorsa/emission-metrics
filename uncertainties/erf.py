@@ -48,7 +48,7 @@ def get_so2_regional_uncertainty(emission_region):
     total_area = np.ma.sum(np.ma.sum(areas))
 
     # Load control and perturbation experiments
-    path = os.path.join(DATA_PATH, 'SO2/TOA_RF_tseries/')
+    path = os.path.join(DATA_PATH, 'so2/TOA_RF_tseries/')
     ctl_path = os.path.join(path, 'HadGEM3_Atmos_Control_25yr_RF_tseries.nc')
     pert_path = os.path.join(path, 'HadGEM3_Atmos_noSO2_{}_25yr_RF_tseries.nc'.format(emission_region))
 
