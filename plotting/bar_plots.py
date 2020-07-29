@@ -15,9 +15,17 @@ BW = 0.35
 
 # y-axis limits
 Y_LIMITS = {
+    'ARTP': {
+        'SO2': [-2.7e-4, 0.7e-4],
+        'BC': [0, 1.2e-3]
+    },
     'iARTP': {
         'SO2': [-0.026, 0.008],
         'BC': [0, 0.11]
+    },
+    'ARPP': {
+        'SO2': [-1.1e-4, 0.25e-4],
+        'BC': [-5e-4, 3e-4]
     },
     'iARPP': {
         'SO2': [-0.01, 0.0025],
@@ -94,7 +102,7 @@ def plot_so2_bc_subplot(
     plt.xlim([0, n_regions + 2])
 
     # Define plot limits based on plotted potentials
-    plt.ylim(Y_LIMITS[potential_name][pollutant])
+    # plt.ylim(Y_LIMITS[potential_name][pollutant])
 
     # Add x-axis ticks and labels
     plt.xticks(x_ticks, region_ids, ha='center', rotation=0, fontsize=FS-3)
@@ -136,15 +144,20 @@ def plot_so2_bc_subplot(
 
 def plot_so2_bc_double_bars(potential_dict, std_dict, response_regions, potential_name, th_a=20, th_b=100):
 
-    assert potential_name in ['iARTP', 'iARPP'], (
-        "{} is not an accepted potential name. Accepted potential names are 'ARTP', 'ARPP'".format(potential_name)
+    assert potential_name in ['ARTP', 'ARPP', 'iARTP', 'iARPP'], (
+        "{} is not an accepted potential name. Accepted potential names are 'ARTP', 'ARPP', 'iARTP', 'iARPP'".format(
+            potential_name
+        )
     )
 
     if potential_name == 'iARTP':
         y_label = 'iARTP (K Tg$^{-1}$)'
-
-    else:
+    elif potential_name == 'ARTP':
+        y_label = 'ARTP (K Tg$^{-1}$)'
+    elif potential_name == 'iARPP':
         y_label = 'iARPP (mm day$^{-1}$ Tg$^{-1}$)'
+    else:
+        y_label = 'ARPP (mm day$^{-1}$ Tg$^{-1}$)'
 
     plt.figure(figsize=(12, 12))
 
