@@ -40,7 +40,11 @@ rr_rad_eff, rad_eff, rad_eff_a = variables.compute_radiative_efficiency(
     response_regions=response_regions
 )
 
-# Compute temperature potentials with and without scalings at each time step
+# Compute temperature potentials using the following lifetime values:
+# min = lifetime - lifetime standard deviation
+# avg = lifetime
+# max = lifetime + lifetime standard deviation
+
 artp_dict = dict()
 iartp_dict = dict()
 
@@ -69,9 +73,9 @@ for t in np.linspace(time_step, time_horizon, int(time_horizon * n_steps)):
 
     print("\rt = {:5.2f}".format(t), flush=True, end=" ")
 
-# # Plot figure
-# sensitivity.plot_scalings(artp_dict, iartp_dict, time_horizon)
-#
-# # Save figure
-# fig_name = '{}_scalings_{}_{}.pdf'.format(pollutant, emission_region, response_regions[0])
-# plt.savefig(os.path.join(FIGURE_PATH, fig_name))
+# Plot figure
+sensitivity.plot_lifetime_range(artp_dict, iartp_dict, time_horizon)
+
+# Save figure
+fig_name = '{}_lifetime_range_{}_{}.pdf'.format(pollutant, emission_region, response_regions[0])
+plt.savefig(os.path.join(FIGURE_PATH, fig_name))
