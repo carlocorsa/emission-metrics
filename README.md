@@ -118,9 +118,9 @@ Usage examples can be found in the following scripts:
 
 ![scaling_impact](figures/SO2_scalings_Europe_Global.png)
 
-* [so2_lifetime_range.py](so2_lifetime_range.py): computes and plots potentials with lower and upper limits that originate from using one lifetime standard deviation.
+* [so2_lifetime_range.py](so2_lifetime_range.py): computes and plots potentials with lower and upper limits that originate from replacing the pollutant lifetime with the lifetime plus or minus one lifetime standard deviation.
 
-![lifetime_range](figures/SO2_lifetime_range_NHML_US.png)
+![lifetime_range](figures/CH4_lifetime_range_NHML_US.png)
 
 ## Regions
 
