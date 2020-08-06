@@ -139,8 +139,11 @@ def plot_lifetime_range(artp_potentials, iartp_potentials, time_horizon):
 
     # Add second axis with ratio of potentials
     ax2 = ax1.twinx()
-    ax2.plot(np.array(artp_potentials['avg']) / np.array(artp_potentials['min']), color='C1')
+    ax2.plot(np.array(artp_potentials['avg']) / np.array(artp_potentials['min']), color='C1', linestyle='--')
     ax2.set_ylim([1, 1.4])
+    ax2.yaxis.label.set_color('C1')
+    ax2.spines["right"].set_edgecolor('C1')
+    ax2.tick_params(axis='y', colors='C1')
 
     # Plot iARTP
     ax3 = plt.subplot(1, 2, 2)
@@ -163,8 +166,11 @@ def plot_lifetime_range(artp_potentials, iartp_potentials, time_horizon):
 
     # Add second axis with ratio of potentials
     ax4 = ax3.twinx()
-    ax4.plot(np.array(iartp_potentials['avg']) / np.array(iartp_potentials['min']), color='C1')
+    ax4.plot(np.array(iartp_potentials['avg']) / np.array(iartp_potentials['min']), color='C1', linestyle='--')
     ax4.set_ylim([1, 1.4])
+    ax4.yaxis.label.set_color('C1')
+    ax4.spines["right"].set_edgecolor('C1')
+    ax4.tick_params(axis='y', colors='C1')
 
     # Adjust subplots position
     plt.subplots_adjust(top=0.90, bottom=0.10, left=0.10, right=0.95, hspace=0.25, wspace=0.28)
