@@ -25,22 +25,34 @@ time_horizons = [20, 100]
 
 # Create dictionaries to store results for different
 # pollutants, emission regions and time horizons
+artp_dict = dict()
+arpp_dict = dict()
 iartp_dict = dict()
 iarpp_dict = dict()
+artp_std_dict = dict()
+arpp_std_dict = dict()
 iartp_std_dict = dict()
 iarpp_std_dict = dict()
 
 for pol in pollutants:
 
+    artp_dict[pol] = dict()
+    arpp_dict[pol] = dict()
     iartp_dict[pol] = dict()
     iarpp_dict[pol] = dict()
+    artp_std_dict[pol] = dict()
+    arpp_std_dict[pol] = dict()
     iartp_std_dict[pol] = dict()
     iarpp_std_dict[pol] = dict()
 
     for reg in emission_regions[pol]:
 
+        artp_dict[pol][reg] = dict()
+        arpp_dict[pol][reg] = dict()
         iartp_dict[pol][reg] = dict()
         iarpp_dict[pol][reg] = dict()
+        artp_std_dict[pol][reg] = dict()
+        arpp_std_dict[pol][reg] = dict()
         iartp_std_dict[pol][reg] = dict()
         iarpp_std_dict[pol][reg] = dict()
 
@@ -83,6 +95,15 @@ for pol in pollutants:
             )
 
             # Compute uncertainties
+            artp_std, arpp_std = propagation.get_potential_uncertainties(
+                pollutant=pol,
+                emission_region=reg,
+                response_regions=response_regions,
+                artp=artp,
+                slow_arpp=slow_arpp,
+                fast_arpp=fast_arpp
+            )
+
             iartp_std, iarpp_std = propagation.get_potential_uncertainties(
                 pollutant=pol,
                 emission_region=reg,
@@ -93,8 +114,12 @@ for pol in pollutants:
             )
 
             # Store results in the dictionaries
+            artp_dict[pol][reg][th] = artp
+            arpp_dict[pol][reg][th] = arpp
             iartp_dict[pol][reg][th] = iartp
             iarpp_dict[pol][reg][th] = iarpp
+            artp_std_dict[pol][reg][th] = artp_std
+            arpp_std_dict[pol][reg][th] = arpp_std
             iartp_std_dict[pol][reg][th] = iartp_std
             iarpp_std_dict[pol][reg][th] = iarpp_std
 
