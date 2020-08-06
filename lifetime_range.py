@@ -14,7 +14,7 @@ from plotting import sensitivity
 FIGURE_PATH = "figures/"
 
 # Define input variables
-pollutant = 'SO2'
+pollutant = 'CH4'
 emission_region = 'NHML'
 response_regions = ['US']
 time_horizon = 100
