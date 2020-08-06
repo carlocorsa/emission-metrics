@@ -10,7 +10,7 @@ D = constants.D
 Cf = constants.CF
 
 
-def compute_atp(pollutant, rad_eff, th, c_scaling=True, erf_scaling=True):
+def compute_atp(pollutant, rad_eff, th, c_scaling=True, erf_scaling=True, lifetime_range=False):
     """Compute integrated and pulse Absolute Temperature Potential (ATP).
     Depending on the radiative efficiency `rad_eff` the returned potentials
     can be either regional or global.
@@ -35,6 +35,11 @@ def compute_atp(pollutant, rad_eff, th, c_scaling=True, erf_scaling=True):
     erf_scaling: boolean (default=True)
         If True, apply radiative forcing multi-model scaling.
 
+    lifetime_range: boolean (default=False)
+        If True, use the pollutant lifetime range values
+        (tau - tau_std, tau, tau + tau_std) and return a
+        potential value for each of them.
+
     Returns
     -------
     iatp: float or array of floats
@@ -46,8 +51,15 @@ def compute_atp(pollutant, rad_eff, th, c_scaling=True, erf_scaling=True):
 
     assert pollutant in constants.SLP, "{} is not an accepted pollutant".format(pollutant)
 
-    # Load constants
-    tau = constants.SPECS[pollutant]['tau']
+    # Check whether to use the lifetime range rather than a single value
+    if lifetime_range:
+        tau = np.array([
+            constants.SPECS[pollutant]['tau'] - constants.SPECS[pollutant]['tau_std'],
+            constants.SPECS[pollutant]['tau'],
+            constants.SPECS[pollutant]['tau'] + constants.SPECS[pollutant]['tau_std']
+        ])
+    else:
+        tau = constants.SPECS[pollutant]['tau']
 
     # Get scaled climate sensitivity
     if c_scaling:
