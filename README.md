@@ -114,6 +114,14 @@ Usage examples can be found in the following scripts:
 
 ![iARTP_100_2](tables/iARTP_table_H100_2.png)
 
+* [so2_scaling_impact.py](so2_scaling_impact.py): computes and plots potentials with and without the scalings used for the effective radiative forcing and the climate sensitivity.
+
+![scaling_impact](figures/SO2_scalings_Europe_Global.png)
+
+* [so2_lifetime_range.py](so2_lifetime_range.py): computes and plots potentials with lower and upper limits that originate from using one lifetime standard deviation.
+
+![lifetime_range](figures/SO2_lifetime_range_NHML_US.png)
+
 ## Regions
 
 The following emission regions can be used for SO<sub>2</sub>:
